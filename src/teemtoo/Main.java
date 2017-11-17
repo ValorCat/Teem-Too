@@ -12,7 +12,7 @@ import javafx.stage.Stage;
  */
 public class Main extends Application {
 
-    private static final int WIDTH = 400, HEIGHT = 250;
+    private static final int WIDTH = 300, HEIGHT = 200;
     private static final String FXML_NAME = "activity-tracker.fxml";
 
     @Override

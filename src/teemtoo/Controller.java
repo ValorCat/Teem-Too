@@ -25,23 +25,28 @@ public class Controller implements Initializable {
 
     private static final String TIME_FORMAT = "h:mm a";
 
-    @FXML private Label clock;
     @FXML private Button menuButton;
-    @FXML private Button leftButton;
-    @FXML private Button rightButton;
+    @FXML private Label clock;
+    @FXML private Label currentTotal;
+    @FXML private Label currentLabel;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setupClock();
-        menuButton.setGraphic(getImage("hamburger.png", 30, 30));
+        menuButton.setGraphic(getImage("hamburger.png", 40, 40));
+        displayTracker(DataManager.getInstance().getCurrentTracker());
     }
 
     public void moveLeft() {
-
+        DataManager data = DataManager.getInstance();
+        data.nextTracker();
+        displayTracker(data.getCurrentTracker());
     }
 
     public void moveRight() {
-
+        DataManager data = DataManager.getInstance();
+        data.previousTracker();
+        displayTracker(data.getCurrentTracker());
     }
 
     private void setupClock() {
@@ -52,6 +57,11 @@ public class Controller implements Initializable {
         Timeline timeline = new Timeline(frame1, frame2);
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
+    }
+
+    private void displayTracker(Tracker tracker) {
+        currentLabel.setText(tracker.getLabel());
+        currentTotal.textProperty().bind(tracker.getTotal());
     }
 
     private static ImageView getImage(String name, int width, int height) {
