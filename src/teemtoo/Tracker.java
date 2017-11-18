@@ -11,4 +11,6 @@ public interface Tracker {
     String getLabel();
     StringExpression getTotal();
 
+    void handleData();
+    void forwardData();
 }
