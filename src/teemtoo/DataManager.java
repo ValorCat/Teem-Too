@@ -16,53 +16,37 @@ import java.util.List;
  */
 public final class DataManager {
 
-    private int currentTracker;
-    private List<Tracker> trackers;
+    private AbstractTracker currentTracker;
+    private AbstractTracker trackerChain;
 
     private static DataManager instance = new DataManager();
 
     private DataManager() {
-        this.currentTracker = 0;
-        // todo create individual classes for each tracker and add to chain of responsibility
-        this.trackers = new ArrayList<>();
-        trackers.add(new Tracker() {
-            private IntegerProperty steps = new SimpleIntegerProperty();
-            public String getLabel() { return "Steps Today"; }
-            public StringExpression getTotal() { return steps.asString(); }
-        });
-        trackers.add(new Tracker() {
-            private DoubleProperty bpm = new SimpleDoubleProperty(80);
-            public String getLabel() { return "Heart Rate"; }
-            public StringExpression getTotal() { return bpm.asString(); }
-        });
-        trackers.add(new Tracker() {
-            private IntegerProperty calories = new SimpleIntegerProperty();
-            public String getLabel() { return "Calorie Intake Today"; }
-            public StringExpression getTotal() { return calories.asString(); }
-        });
-        trackers.add(new Tracker() {
-            public String getLabel() { return "Last Sleep Time"; }
-            public StringExpression getTotal() { return Bindings.concat("WIP"); }
-        });
+        //Create Chain of Responsibility
+        trackerChain = new StepTracker();
+        AbstractTracker bpm = new HeartbeatTracker();
+        AbstractTracker calorie = new CalorieTracker();
+        AbstractTracker sleep = new SleepTracker();
+
+        trackerChain.setNextTracker(bpm);
+        bpm.setNextTracker(calorie);
+        calorie.setNextTracker(sleep);
+
+        currentTracker = trackerChain;
     }
 
+
     public void nextTracker() {
-        currentTracker++;
-        if (currentTracker >= trackers.size()) {
-            currentTracker = 0;
-        }
+        currentTracker = currentTracker.getNextTracker();
     }
 
     public void previousTracker() {
-        currentTracker--;
-        if (currentTracker < 0) {
-            currentTracker = trackers.size() - 1;
-        }
+        currentTracker = currentTracker.getNextTracker();
     }
 
-    public Tracker getCurrentTracker() {
-        assert !trackers.isEmpty() && currentTracker > 0 && currentTracker < trackers.size();
-        return trackers.get(currentTracker);
+
+    public AbstractTracker getCurrentTracker() {
+        return currentTracker;
     }
 
     public static DataManager getInstance() {
