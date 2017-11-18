@@ -59,7 +59,7 @@ public class Controller implements Initializable {
         timeline.play();
     }
 
-    private void displayTracker(Tracker tracker) {
+    private void displayTracker(AbstractTracker tracker) {
         currentLabel.setText(tracker.getLabel());
         currentTotal.textProperty().bind(tracker.getTotal());
     }
