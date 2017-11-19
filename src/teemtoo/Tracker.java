@@ -6,11 +6,45 @@ import javafx.beans.binding.StringExpression;
  * @author Anthony Morrell
  * @since 11/17/2017
  */
-public interface Tracker {
+public abstract class Tracker {
 
-    String getLabel();
-    StringExpression getTotal();
+    private String label;
+    private Tracker prev, next;
+    private boolean endOfChain;
 
-    void handleData();
-    void forwardData();
+    public Tracker(String label) {
+        this.label = label;
+    }
+
+    public abstract StringExpression getTotal();
+    public abstract void handleData();
+
+    public String getLabel() {
+        assert label != null;
+        return label;
+    }
+
+    public void forwardData() {
+        if (!endOfChain) {
+            next.forwardData();
+        }
+    }
+
+    public Tracker getPrevious() {
+        return prev;
+    }
+
+    public Tracker getNext() {
+        return next;
+    }
+
+    public void link(Tracker next) {
+        this.next = next;
+        next.prev = this;
+    }
+
+    public void setEndOfChain() {
+        endOfChain = true;
+    }
+
 }

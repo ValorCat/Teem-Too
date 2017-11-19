@@ -9,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.util.Duration;
 
 import java.io.InputStream;
@@ -25,6 +26,8 @@ public class Controller implements Initializable {
 
     private static final String TIME_FORMAT = "h:mm a";
 
+    private static Controller instance;
+
     @FXML private Button menuButton;
     @FXML private Label clock;
     @FXML private Label currentTotal;
@@ -35,6 +38,7 @@ public class Controller implements Initializable {
         setupClock();
         menuButton.setGraphic(getImage("hamburger.png", 40, 40));
         displayTracker(DataManager.getInstance().getCurrentTracker());
+        instance = this;
     }
 
     public void moveLeft() {
@@ -50,7 +54,6 @@ public class Controller implements Initializable {
     }
 
     private void setupClock() {
-        // todo ensure clock displays correctly when hour has 2 digits
         DateTimeFormatter format = DateTimeFormatter.ofPattern(TIME_FORMAT);
         KeyFrame frame1 = new KeyFrame(Duration.seconds(0), e -> clock.setText(LocalTime.now().format(format)));
         KeyFrame frame2 = new KeyFrame(Duration.seconds(1));
@@ -62,6 +65,21 @@ public class Controller implements Initializable {
     private void displayTracker(Tracker tracker) {
         currentLabel.setText(tracker.getLabel());
         currentTotal.textProperty().bind(tracker.getTotal());
+    }
+
+    public static Controller getInstance() {
+        return instance;
+    }
+
+    public static void handleKeyboard(KeyEvent event) {
+        switch (event.getCode()) {
+            case LEFT:
+                getInstance().moveLeft();
+                break;
+            case RIGHT:
+                getInstance().moveRight();
+                break;
+        }
     }
 
     private static ImageView getImage(String name, int width, int height) {

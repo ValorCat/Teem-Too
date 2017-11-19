@@ -19,6 +19,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         Pane window = FXMLLoader.load(Main.class.getResource(FXML_NAME));
         Scene scene = new Scene(window, WIDTH, HEIGHT);
+        scene.setOnKeyPressed(Controller::handleKeyboard);
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
         primaryStage.show();
