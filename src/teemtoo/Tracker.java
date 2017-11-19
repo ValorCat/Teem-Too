@@ -1,6 +1,7 @@
 package teemtoo;
 
 import javafx.beans.binding.StringExpression;
+import teemtoo.event.Event;
 
 /**
  * @author Anthony Morrell
@@ -17,16 +18,16 @@ public abstract class Tracker {
     }
 
     public abstract StringExpression getTotal();
-    public abstract void handleData();
+    public abstract void handleData(Event event);
 
     public String getLabel() {
         assert label != null;
         return label;
     }
 
-    public void forwardData() {
+    protected void forwardData(Event event) {
         if (!endOfChain) {
-            next.forwardData();
+            next.handleData(event);
         }
     }
 

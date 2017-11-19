@@ -2,6 +2,7 @@ package teemtoo;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringExpression;
+import teemtoo.event.Event;
 
 /**
  * @author Anthony Morrell
@@ -19,8 +20,16 @@ public class SleepTracker extends Tracker {
     }
 
     @Override
-    public void handleData() {
-
+    public void handleData(Event event) {
+        long fallAsleepTime = event.getFallAsleepTime();
+        long awakenTime = event.getAwakenTime();
+        if (fallAsleepTime != Event.NO_DATA) {
+            // todo go to sleep
+        } else if (awakenTime != Event.NO_DATA) {
+            // todo wake up
+        } else {
+            forwardData(event);
+        }
     }
 
 }

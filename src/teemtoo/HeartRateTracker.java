@@ -3,6 +3,7 @@ package teemtoo;
 import javafx.beans.binding.StringExpression;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import teemtoo.event.Event;
 
 /**
  * @author Anthony Morrell
@@ -23,8 +24,18 @@ public class HeartRateTracker extends Tracker {
     }
 
     @Override
-    public void handleData() {
+    public void handleData(Event event) {
+        double data = event.getBPMData();
+        if (data == Event.NO_DATA) {
+            forwardData(event);
+        } else {
+            updateBPM(data);
+        }
+    }
 
+    private void updateBPM(double newData) {
+        // todo determine best way to calculate bpm
+        bpm.set(newData);
     }
 
 }

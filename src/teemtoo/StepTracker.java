@@ -3,6 +3,7 @@ package teemtoo;
 import javafx.beans.binding.StringExpression;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import teemtoo.event.Event;
 
 /**
  * @author Anthony Morrell
@@ -23,8 +24,16 @@ public class StepTracker extends Tracker {
     }
 
     @Override
-    public void handleData() {
+    public void handleData(Event event) {
+        if (event.isStep()) {
+            addStep();
+        } else {
+            forwardData(event);
+        }
+    }
 
+    private void addStep() {
+        steps.set(steps.get() + 1);
     }
 
 }
