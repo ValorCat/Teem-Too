@@ -1,5 +1,6 @@
 package teemtoo;
 
+import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringExpression;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -15,12 +16,12 @@ public class HeartRateTracker extends Tracker {
 
     public HeartRateTracker() {
         super("Heart Rate");
-        bpm = new SimpleDoubleProperty();
+        bpm = new SimpleDoubleProperty(80);
     }
 
     @Override
     public StringExpression getTotal() {
-        return bpm.asString();
+        return Bindings.format("%.1f", bpm);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package teemtoo;
 
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -23,6 +24,16 @@ public class Main extends Application {
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
         primaryStage.show();
+        getMainTimer().start();
+    }
+
+    private static AnimationTimer getMainTimer() {
+        return new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                DataManager.getInstance().getSensors().forEach(Sensor::poll);
+            }
+        };
     }
 
 }

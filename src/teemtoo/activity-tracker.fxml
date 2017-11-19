@@ -4,7 +4,7 @@
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<AnchorPane onSwipeLeft="#moveLeft" onSwipeRight="#moveRight" prefHeight="200.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="teemtoo.Controller">
+<AnchorPane onSwipeLeft="#moveRight" onSwipeRight="#moveLeft" prefHeight="200.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="teemtoo.Controller">
    <children>
       <Button fx:id="menuButton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" graphicTextGap="0.0" layoutX="116.0" layoutY="64.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" wrapText="true" AnchorPane.leftAnchor="-2.0" AnchorPane.topAnchor="-2.0">
          <cursor>

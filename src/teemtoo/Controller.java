@@ -43,13 +43,13 @@ public class Controller implements Initializable {
 
     public void moveLeft() {
         DataManager data = DataManager.getInstance();
-        data.nextTracker();
+        data.previousTracker();
         displayTracker(data.getCurrentTracker());
     }
 
     public void moveRight() {
         DataManager data = DataManager.getInstance();
-        data.previousTracker();
+        data.nextTracker();
         displayTracker(data.getCurrentTracker());
     }
 
