@@ -1,5 +1,9 @@
 package teemtoo;
 
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ObservableBooleanValue;
 import teemtoo.event.Event;
 
 import java.util.ArrayList;
@@ -10,7 +14,8 @@ import java.util.List;
  */
 public final class DataManager {
 
-    private Tracker chain, current;
+    private Tracker chain;
+    private ObjectProperty<Tracker> current;
     private List<Sensor> sensors;
 
     private static DataManager instance = new DataManager();
@@ -18,7 +23,7 @@ public final class DataManager {
     private DataManager() {
         setupTrackers();
         setupSensors();
-        current = chain;
+        current = new SimpleObjectProperty<>(chain);
     }
 
     public void handleData(Event event) {
@@ -26,19 +31,27 @@ public final class DataManager {
     }
 
     public void nextTracker() {
-        current = current.getNext();
+        current.set(current.get().getNext());
     }
 
     public void previousTracker() {
-        current = current.getPrevious();
+        current.set(current.get().getPrevious());
     }
 
     public Tracker getCurrentTracker() {
+        return current.get();
+    }
+
+    public ObjectProperty<Tracker> currentTrackerProperty() {
         return current;
     }
 
     public List<Sensor> getSensors() {
         return sensors;
+    }
+
+    public ObservableBooleanValue showCalorieInput() {
+        return Bindings.createBooleanBinding(() -> current.get().showCalorieInput(), current);
     }
 
     private void setupTrackers() {

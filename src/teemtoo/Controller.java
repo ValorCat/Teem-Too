@@ -7,10 +7,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.util.Duration;
+import teemtoo.event.CalorieEvent;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -24,6 +26,7 @@ import java.util.ResourceBundle;
 public class Controller implements Initializable {
 
     private static final String TIME_FORMAT = "h:mm a";
+    private static final int[] CALORIE_INTAKE_LEVELS = {1, 10, 50};
 
     private static Controller instance;
 
@@ -31,13 +34,30 @@ public class Controller implements Initializable {
     @FXML private Label clock;
     @FXML private Label currentTotal;
     @FXML private Label currentLabel;
+    @FXML private Button addCaloriesButton;
+    @FXML private Slider addCalorieSlider;
+
+    private int calorieIntakeAmount = 10;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setupClock();
+        setupCalories();
         menuButton.setGraphic(getImage("hamburger.png", 40, 40));
         displayTracker(DataManager.getInstance().getCurrentTracker());
         instance = this;
+
+    }
+
+    private void setupCalories() {
+        addCaloriesButton.visibleProperty().bind(DataManager.getInstance().showCalorieInput());
+        addCalorieSlider.visibleProperty().bind(DataManager.getInstance().showCalorieInput());
+        addCalorieSlider.setMax(CALORIE_INTAKE_LEVELS.length - 1);
+        addCalorieSlider.valueProperty().addListener((obs, old, value) -> {
+            int intakeAmount = CALORIE_INTAKE_LEVELS[value.intValue()];
+            addCaloriesButton.setText("+" + intakeAmount);
+            calorieIntakeAmount = intakeAmount;
+        });
     }
 
     public void moveLeft() {
@@ -50,6 +70,10 @@ public class Controller implements Initializable {
         DataManager data = DataManager.getInstance();
         data.nextTracker();
         displayTracker(data.getCurrentTracker());
+    }
+
+    public void addCalories() {
+        DataManager.getInstance().handleData(new CalorieEvent(calorieIntakeAmount));
     }
 
     private void setupClock() {

@@ -13,8 +13,8 @@ public class CalorieTracker extends Tracker {
     private IntegerProperty calories;
 
     public CalorieTracker() {
-        super("Calorie Intake Today");
-        calories = new SimpleIntegerProperty();
+        super("Calories Today");
+        calories = new SimpleIntegerProperty(0);
     }
 
     @Override
@@ -30,6 +30,11 @@ public class CalorieTracker extends Tracker {
         } else {
             addCalories(intake);
         }
+    }
+
+    @Override
+    public boolean showCalorieInput() {
+        return true;
     }
 
     private void addCalories(int amount) {

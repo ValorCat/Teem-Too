@@ -47,4 +47,8 @@ public abstract class Tracker {
         endOfChain = true;
     }
 
+    public boolean showCalorieInput() {
+        return false;
+    }
+
 }
