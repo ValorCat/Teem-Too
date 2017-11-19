@@ -1,7 +1,7 @@
 package teemtoo;
 
 /**
- * Created by Daniel on 11/18/2017.
+ * @since 11/18/2017.
  */
 public class DataLog<T> {
     public T today;

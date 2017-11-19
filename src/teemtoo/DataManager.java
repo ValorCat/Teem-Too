@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Anthony Morrell
  * @since 11/17/2017
  */
 public final class DataManager {

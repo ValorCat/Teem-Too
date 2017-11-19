@@ -4,7 +4,6 @@ import teemtoo.event.Event;
 import teemtoo.event.StepEvent;
 
 /**
- * @author Anthony Morrell
  * @since 11/19/2017
  */
 public class Pedometer implements Sensor {

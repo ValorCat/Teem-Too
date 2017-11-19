@@ -5,7 +5,6 @@ import teemtoo.event.HeartEvent;
 import java.util.Random;
 
 /**
- * @author Anthony Morrell
  * @since 11/19/2017
  */
 public class PulseReader implements Sensor {
@@ -18,14 +17,14 @@ public class PulseReader implements Sensor {
     @Override
     public void poll() {
         pollCounter++;
-        if (pollCounter == 90) {
+        if (pollCounter == 120) {
             update(new HeartEvent(getHeartRate()));
             pollCounter = 0;
         }
     }
 
     private double getHeartRate() {
-        return 80 + random.nextGaussian() * 8;
+        return 80 + random.nextGaussian() * 6;
     }
 
 }

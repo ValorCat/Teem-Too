@@ -8,7 +8,6 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 /**
- * @author Anthony Morrell
  * @since 11/17/2017
  */
 public class Main extends Application {

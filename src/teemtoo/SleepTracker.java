@@ -5,8 +5,7 @@ import javafx.beans.binding.StringExpression;
 import teemtoo.event.Event;
 
 /**
- * @author Anthony Morrell
- * @since 11/19/2017
+ * @since 11/18/2017
  */
 public class SleepTracker extends Tracker {
 

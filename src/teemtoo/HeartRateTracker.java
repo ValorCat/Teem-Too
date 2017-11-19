@@ -7,8 +7,7 @@ import javafx.beans.property.SimpleDoubleProperty;
 import teemtoo.event.Event;
 
 /**
- * @author Anthony Morrell
- * @since 11/19/2017
+ * @since 11/17/2017
  */
 public class HeartRateTracker extends Tracker {
 

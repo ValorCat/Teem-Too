@@ -4,7 +4,6 @@ import javafx.beans.binding.StringExpression;
 import teemtoo.event.Event;
 
 /**
- * @author Anthony Morrell
  * @since 11/17/2017
  */
 public abstract class Tracker {

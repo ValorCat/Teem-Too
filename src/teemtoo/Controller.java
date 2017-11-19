@@ -19,7 +19,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 /**
- * @author Anthony Morrell
  * @since 11/17/2017
  */
 public class Controller implements Initializable {
@@ -62,22 +61,18 @@ public class Controller implements Initializable {
         timeline.play();
     }
 
-    private void displayTracker(AbstractTracker tracker) {
+    private void displayTracker(Tracker tracker) {
         currentLabel.setText(tracker.getLabel());
         currentTotal.textProperty().bind(tracker.getTotal());
-    }
-
-    public static Controller getInstance() {
-        return instance;
     }
 
     public static void handleKeyboard(KeyEvent event) {
         switch (event.getCode()) {
             case LEFT:
-                getInstance().moveLeft();
+                instance.moveLeft();
                 break;
             case RIGHT:
-                getInstance().moveRight();
+                instance.moveRight();
                 break;
         }
     }
