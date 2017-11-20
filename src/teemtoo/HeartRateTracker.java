@@ -9,7 +9,7 @@ import teemtoo.event.Event;
 /**
  * @since 11/17/2017
  */
-public class HeartRateTracker extends Tracker {
+public class HeartRateTracker extends Tracker<Double> {
 
     private DoubleProperty bpm;
 
@@ -25,12 +25,18 @@ public class HeartRateTracker extends Tracker {
 
     @Override
     public void handleData(Event event) {
+        super.handleData(event);
         double data = event.getBPMData();
         if (data == Event.NO_DATA) {
             forwardData(event);
         } else {
             updateBPM(data);
         }
+    }
+
+    @Override
+    public void saveAndReset() {
+        // todo determine how to save average bpm
     }
 
     private void updateBPM(double newData) {

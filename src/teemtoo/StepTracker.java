@@ -8,7 +8,7 @@ import teemtoo.event.Event;
 /**
  * @since 11/18/2017
  */
-public class StepTracker extends Tracker {
+public class StepTracker extends Tracker<Integer> {
 
     private IntegerProperty steps;
 
@@ -24,11 +24,18 @@ public class StepTracker extends Tracker {
 
     @Override
     public void handleData(Event event) {
+        super.handleData(event);
         if (event.isStep()) {
             addStep();
         } else {
             forwardData(event);
         }
+    }
+
+    @Override
+    public void saveAndReset() {
+        log.update(steps.get());
+        steps.set(0);
     }
 
     private void addStep() {

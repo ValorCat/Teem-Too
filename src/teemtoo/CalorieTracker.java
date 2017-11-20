@@ -8,7 +8,7 @@ import teemtoo.event.Event;
 /**
  * @since 11/18/2017
  */
-public class CalorieTracker extends Tracker {
+public class CalorieTracker extends Tracker<Integer> {
 
     private IntegerProperty calories;
 
@@ -24,12 +24,19 @@ public class CalorieTracker extends Tracker {
 
     @Override
     public void handleData(Event event) {
+        super.handleData(event);
         int intake = event.getCalorieData();
         if (intake == Event.NO_DATA) {
             forwardData(event);
         } else {
             addCalories(intake);
         }
+    }
+
+    @Override
+    public void saveAndReset() {
+        log.update(calories.get());
+        calories.set(0);
     }
 
     @Override

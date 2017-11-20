@@ -23,4 +23,8 @@ public class Event {
         return NO_DATA;
     }
 
+    public boolean isReset() {
+        return false;
+    }
+
 }

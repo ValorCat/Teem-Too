@@ -6,18 +6,27 @@ import teemtoo.event.Event;
 /**
  * @since 11/17/2017
  */
-public abstract class Tracker {
+public abstract class Tracker<NumType extends Number> {
 
     private String label;
     private Tracker prev, next;
     private boolean endOfChain;
+    protected DataLog<NumType> log;
 
     public Tracker(String label) {
         this.label = label;
+        this.log = new DataLog<>();
     }
 
     public abstract StringExpression getTotal();
-    public abstract void handleData(Event event);
+    public abstract void saveAndReset();
+
+    public void handleData(Event event) {
+        if (event.isReset()) {
+            saveAndReset();
+            forwardData(event);
+        }
+    }
 
     public String getLabel() {
         assert label != null;

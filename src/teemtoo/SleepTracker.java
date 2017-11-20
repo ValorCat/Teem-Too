@@ -7,14 +7,16 @@ import javafx.beans.property.LongProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleLongProperty;
 import teemtoo.event.Event;
+import teemtoo.event.ResetEvent;
 
 import java.util.concurrent.TimeUnit;
 
 /**
  * @since 11/18/2017
  */
-public class SleepTracker extends Tracker {
+public class SleepTracker extends Tracker<Long> {
 
+    private static final int MIN_SLEEP_THRESHOLD = 5000;
     private LongProperty lastFallAsleepTime;
     private LongProperty lastDuration;
     private BooleanProperty inSleepMode;
@@ -32,9 +34,9 @@ public class SleepTracker extends Tracker {
         return Bindings.createStringBinding(() -> {
             if (inSleepMode.get()) {
                 // currently asleep
-                return "ZZZ";
+                return "ZZZ...";
             } else if (lastFallAsleepTime.get() == -1) {
-                // not asleep, but no prior sleep data
+                // no prior sleep data
                 return "---";
             } else {
                 // has slept before
@@ -48,12 +50,17 @@ public class SleepTracker extends Tracker {
 
     @Override
     public void handleData(Event event) {
+        super.handleData(event);
         long sleepTimestamp = event.getSleepTimestamp();
         if (sleepTimestamp != Event.NO_DATA) {
             boolean asleep = inSleepMode.get();
             if (asleep) {
                 long duration = System.currentTimeMillis() - lastFallAsleepTime.get();
-                lastDuration.set(duration);
+                if (duration > MIN_SLEEP_THRESHOLD) {
+                    lastDuration.set(duration);
+                    // todo add confirmation dialog
+                    DataManager.getInstance().handleData(new ResetEvent());
+                }
             } else {
                 lastFallAsleepTime.set(sleepTimestamp);
             }
@@ -61,6 +68,12 @@ public class SleepTracker extends Tracker {
         } else {
             forwardData(event);
         }
+    }
+
+    @Override
+    public void saveAndReset() {
+        log.update(lastDuration.get());
+
     }
 
     @Override
