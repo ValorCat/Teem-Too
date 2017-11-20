@@ -1,11 +1,11 @@
 package teemtoo;
 
 import javafx.beans.binding.Bindings;
-import javafx.beans.binding.StringExpression;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.LongProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleLongProperty;
+import javafx.beans.value.ObservableStringValue;
 import teemtoo.event.Event;
 import teemtoo.event.ResetEvent;
 
@@ -17,6 +17,7 @@ import java.util.concurrent.TimeUnit;
 public class SleepTracker extends Tracker<Long> {
 
     private static final int MIN_SLEEP_THRESHOLD = 5000;
+
     private LongProperty lastFallAsleepTime;
     private LongProperty lastDuration;
     private BooleanProperty inSleepMode;
@@ -24,13 +25,13 @@ public class SleepTracker extends Tracker<Long> {
     public SleepTracker() {
         super("Sleep Duration");
         lastFallAsleepTime = new SimpleLongProperty(-1);
-        lastDuration = new SimpleLongProperty(0);
+        lastDuration = new SimpleLongProperty();
         inSleepMode = new SimpleBooleanProperty();
         Controller.getInstance().inSleepModeProperty().bindBidirectional(inSleepMode);
     }
 
     @Override
-    public StringExpression getTotal() {
+    public ObservableStringValue getValue() {
         return Bindings.createStringBinding(() -> {
             if (inSleepMode.get()) {
                 // currently asleep
@@ -49,31 +50,29 @@ public class SleepTracker extends Tracker<Long> {
     }
 
     @Override
-    public void handleData(Event event) {
-        super.handleData(event);
-        long sleepTimestamp = event.getSleepTimestamp();
-        if (sleepTimestamp != Event.NO_DATA) {
-            boolean asleep = inSleepMode.get();
-            if (asleep) {
-                long duration = System.currentTimeMillis() - lastFallAsleepTime.get();
-                if (duration > MIN_SLEEP_THRESHOLD) {
-                    lastDuration.set(duration);
-                    // todo add confirmation dialog
-                    DataManager.getInstance().handleData(new ResetEvent());
-                }
-            } else {
-                lastFallAsleepTime.set(sleepTimestamp);
-            }
-            inSleepMode.set(!asleep);
-        } else {
-            forwardData(event);
-        }
+    protected boolean canHandle(Event event) {
+        return event.getSleepTimestamp() != Event.NO_DATA;
     }
 
     @Override
-    public void saveAndReset() {
-        log.update(lastDuration.get());
+    protected void handle(Event event) {
+        boolean asleep = inSleepMode.get();
+        if (asleep) {
+            long duration = System.currentTimeMillis() - lastFallAsleepTime.get();
+            if (duration > MIN_SLEEP_THRESHOLD) {
+                lastDuration.set(duration);
+                // todo add confirmation dialog
+                DataManager.getInstance().handle(new ResetEvent());
+            }
+        } else {
+            lastFallAsleepTime.set(event.getSleepTimestamp());
+        }
+        inSleepMode.set(!asleep);
+    }
 
+    @Override
+    protected void saveAndReset() {
+        log.update(lastDuration.get());
     }
 
     @Override

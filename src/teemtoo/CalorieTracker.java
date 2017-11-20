@@ -1,8 +1,8 @@
 package teemtoo;
 
-import javafx.beans.binding.StringExpression;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.value.ObservableStringValue;
 import teemtoo.event.Event;
 
 /**
@@ -14,27 +14,26 @@ public class CalorieTracker extends Tracker<Integer> {
 
     public CalorieTracker() {
         super("Calories Today");
-        calories = new SimpleIntegerProperty(0);
+        calories = new SimpleIntegerProperty();
     }
 
     @Override
-    public StringExpression getTotal() {
+    public ObservableStringValue getValue() {
         return calories.asString();
     }
 
     @Override
-    public void handleData(Event event) {
-        super.handleData(event);
-        int intake = event.getCalorieData();
-        if (intake == Event.NO_DATA) {
-            forwardData(event);
-        } else {
-            addCalories(intake);
-        }
+    protected boolean canHandle(Event event) {
+        return event.getCalorieData() != Event.NO_DATA;
     }
 
     @Override
-    public void saveAndReset() {
+    protected void handle(Event event) {
+        calories.set(calories.get() + event.getCalorieData());
+    }
+
+    @Override
+    protected void saveAndReset() {
         log.update(calories.get());
         calories.set(0);
     }
@@ -42,10 +41,6 @@ public class CalorieTracker extends Tracker<Integer> {
     @Override
     public boolean showCalorieInput() {
         return true;
-    }
-
-    private void addCalories(int amount) {
-        calories.set(calories.get() + amount);
     }
 
 }

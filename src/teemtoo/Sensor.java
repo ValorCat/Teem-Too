@@ -10,7 +10,7 @@ public interface Sensor {
     void poll();
 
     default void update(Event event) {
-        DataManager.getInstance().handleData(event);
+        DataManager.getInstance().handle(event);
     }
 
 }

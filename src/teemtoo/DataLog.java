@@ -26,11 +26,15 @@ public class DataLog<NumType extends Number> {
                 .average();
     }
 
-    public void update(NumType total) {
-        if (month.size() == FULL_SIZE) {
+    public void update(NumType value) {
+        if (isFull()) {
             month.removeLast();
         }
-        month.addFirst(total);
+        month.addFirst(value);
+    }
+
+    private boolean isFull() {
+        return month.size() == FULL_SIZE;
     }
 
 }

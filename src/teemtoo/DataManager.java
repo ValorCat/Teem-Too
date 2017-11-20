@@ -6,7 +6,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableBooleanValue;
 import teemtoo.event.Event;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -14,20 +14,20 @@ import java.util.List;
  */
 public final class DataManager {
 
-    private Tracker chain;
-    private ObjectProperty<Tracker> current;
-    private List<Sensor> sensors;
-
     private static DataManager instance = new DataManager();
+
+    private ObjectProperty<Tracker> current;
+    private Tracker chain;
+    private List<Sensor> sensors;
 
     private DataManager() {
         setupTrackers();
-        setupSensors();
+        sensors = Arrays.asList(new Pedometer(), new PulseReader());
         current = new SimpleObjectProperty<>(chain);
     }
 
-    public void handleData(Event event) {
-        chain.handleData(event);
+    public void handle(Event event) {
+        chain.attemptToHandle(event);
     }
 
     public void nextTracker() {
@@ -40,10 +40,6 @@ public final class DataManager {
 
     public Tracker getCurrentTracker() {
         return current.get();
-    }
-
-    public ObjectProperty<Tracker> currentTrackerProperty() {
-        return current;
     }
 
     public List<Sensor> getSensors() {
@@ -59,24 +55,17 @@ public final class DataManager {
     }
 
     private void setupTrackers() {
-        Tracker steps = new StepTracker();
-        Tracker heart = new HeartRateTracker();
-        Tracker calories = new CalorieTracker();
-        Tracker sleep = new SleepTracker();
+        StepTracker steps = new StepTracker();
+        HeartRateTracker heart = new HeartRateTracker();
+        CalorieTracker calories = new CalorieTracker();
+        SleepTracker sleep = new SleepTracker();
 
         steps.link(heart);
         heart.link(calories);
         calories.link(sleep);
         sleep.link(steps);
         sleep.setEndOfChain();
-
         chain = steps;
-    }
-
-    private void setupSensors() {
-        sensors = new ArrayList<>();
-        sensors.add(new Pedometer());
-        sensors.add(new PulseReader());
     }
 
     public static DataManager getInstance() {

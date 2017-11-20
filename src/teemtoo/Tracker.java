@@ -1,6 +1,6 @@
 package teemtoo;
 
-import javafx.beans.binding.StringExpression;
+import javafx.beans.value.ObservableStringValue;
 import teemtoo.event.Event;
 
 /**
@@ -9,8 +9,8 @@ import teemtoo.event.Event;
 public abstract class Tracker<NumType extends Number> {
 
     private String label;
-    private Tracker prev, next;
-    private boolean endOfChain;
+    private Tracker previous, next;
+    private boolean isEndOfChain;
     protected DataLog<NumType> log;
 
     public Tracker(String label) {
@@ -18,13 +18,19 @@ public abstract class Tracker<NumType extends Number> {
         this.log = new DataLog<>();
     }
 
-    public abstract StringExpression getTotal();
-    public abstract void saveAndReset();
+    public abstract ObservableStringValue getValue();
+    protected abstract boolean canHandle(Event event);
+    protected abstract void handle(Event event);
+    protected abstract void saveAndReset();
 
-    public void handleData(Event event) {
+    public void attemptToHandle(Event event) {
         if (event.isReset()) {
             saveAndReset();
-            forwardData(event);
+            forward(event);
+        } else if (canHandle(event)) {
+            handle(event);
+        } else {
+            forward(event);
         }
     }
 
@@ -33,14 +39,8 @@ public abstract class Tracker<NumType extends Number> {
         return label;
     }
 
-    protected void forwardData(Event event) {
-        if (!endOfChain) {
-            next.handleData(event);
-        }
-    }
-
     public Tracker getPrevious() {
-        return prev;
+        return previous;
     }
 
     public Tracker getNext() {
@@ -49,11 +49,11 @@ public abstract class Tracker<NumType extends Number> {
 
     public void link(Tracker next) {
         this.next = next;
-        next.prev = this;
+        next.previous = this;
     }
 
     public void setEndOfChain() {
-        endOfChain = true;
+        isEndOfChain = true;
     }
 
     public boolean showCalorieInput() {
@@ -62,6 +62,12 @@ public abstract class Tracker<NumType extends Number> {
 
     public boolean showSleepButton() {
         return false;
+    }
+
+    private void forward(Event event) {
+        if (!isEndOfChain) {
+            next.attemptToHandle(event);
+        }
     }
 
 }

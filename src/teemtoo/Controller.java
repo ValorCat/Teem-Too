@@ -5,8 +5,10 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ObservableBooleanValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
@@ -29,16 +31,18 @@ import java.util.ResourceBundle;
  */
 public class Controller implements Initializable {
 
+    public static final int WIDTH = 300, HEIGHT = 200;
+    public static final String FXML_NAME = "activity-tracker.fxml";
     private static final String TIME_FORMAT = "h:mm a";
     private static final int[] CALORIE_INTAKE_LEVELS = {1, 10, 50};
-    private static final String NIGHT_MODE_BG = "5F9EA0";
+    private static final String NIGHT_MODE_COLOR = "5F9EA0";
 
     private static Controller instance;
 
     @FXML private Pane background;
     @FXML private Button menuButton;
     @FXML private Label clock;
-    @FXML private Label currentTotal;
+    @FXML private Label currentValue;
     @FXML private Label currentLabel;
     @FXML private Button addCaloriesButton;
     @FXML private Slider addCalorieSlider;
@@ -53,41 +57,39 @@ public class Controller implements Initializable {
         setupClock();
         setupCalories();
         setupSleep();
-        menuButton.setGraphic(getImage("hamburger.png", 40, 40));
-        displayTracker(DataManager.getInstance().getCurrentTracker());
+        setupMenu();
+        updateTracker();
     }
 
     public void moveLeft() {
-        DataManager data = DataManager.getInstance();
-        data.previousTracker();
-        displayTracker(data.getCurrentTracker());
+        DataManager.getInstance().previousTracker();
+        updateTracker();
     }
 
     public void moveRight() {
-        DataManager data = DataManager.getInstance();
-        data.nextTracker();
-        displayTracker(data.getCurrentTracker());
+        DataManager.getInstance().nextTracker();
+        updateTracker();
     }
 
     public void addCalories() {
-        DataManager.getInstance().handleData(new CalorieEvent(calorieIntakeAmount));
+        DataManager.getInstance().handle(new CalorieEvent(calorieIntakeAmount));
     }
 
     public void toggleSleepMode() {
-        DataManager.getInstance().handleData(new SleepEvent());
+        DataManager.getInstance().handle(new SleepEvent());
     }
 
     public BooleanProperty inSleepModeProperty() {
         return inSleepMode;
     }
 
-    public static void handleKeyboard(KeyEvent event) {
+    public void handleKeyboard(KeyEvent event) {
         switch (event.getCode()) {
             case LEFT:
-                instance.moveLeft();
+                moveLeft();
                 break;
             case RIGHT:
-                instance.moveRight();
+                moveRight();
                 break;
         }
     }
@@ -102,8 +104,9 @@ public class Controller implements Initializable {
     }
 
     private void setupCalories() {
-        addCaloriesButton.visibleProperty().bind(DataManager.getInstance().showCalorieInput());
-        addCalorieSlider.visibleProperty().bind(DataManager.getInstance().showCalorieInput());
+        ObservableBooleanValue areCaloriesShowing = DataManager.getInstance().showCalorieInput();
+        setVisibility(addCaloriesButton, areCaloriesShowing);
+        setVisibility(addCalorieSlider, areCaloriesShowing);
         addCalorieSlider.setMax(CALORIE_INTAKE_LEVELS.length - 1);
         addCalorieSlider.valueProperty().addListener((obs, old, value) -> {
             int intakeAmount = CALORIE_INTAKE_LEVELS[value.intValue()];
@@ -113,20 +116,29 @@ public class Controller implements Initializable {
     }
 
     private void setupSleep() {
-        sleepButton.setGraphic(getImage("moon.png", 40, 35));
-        sleepButton.visibleProperty().bind(DataManager.getInstance().showSleepButton());
+        sleepButton.setGraphic(getImage("moon", 40, 35));
+        setVisibility(sleepButton, DataManager.getInstance().showSleepButton());
         inSleepMode.addListener((obs, old, asleep) -> {
             if (asleep) {
-                background.setStyle("-fx-background-color: #" + NIGHT_MODE_BG);
+                setBackgroundColor(NIGHT_MODE_COLOR);
             } else {
-                background.setStyle("-fx-background-color: #FFFFFF");
+                setBackgroundColor("FFFFFF");
             }
         });
     }
 
-    private void displayTracker(Tracker tracker) {
+    private void setupMenu() {
+        menuButton.setGraphic(getImage("hamburger", 40, 40));
+    }
+
+    private void updateTracker() {
+        Tracker tracker = DataManager.getInstance().getCurrentTracker();
         currentLabel.setText(tracker.getLabel());
-        currentTotal.textProperty().bind(tracker.getTotal());
+        currentValue.textProperty().bind(tracker.getValue());
+    }
+
+    private void setBackgroundColor(String hexColor) {
+        background.setStyle("-fx-background-color: #" + hexColor);
     }
 
     public static Controller getInstance() {
@@ -134,7 +146,8 @@ public class Controller implements Initializable {
     }
 
     private static ImageView getImage(String name, int width, int height) {
-        ImageView view = new ImageView(new Image(getResource(name)));
+        assert !name.endsWith(".png");
+        ImageView view = new ImageView(new Image(getResource(name + ".png")));
         view.setFitWidth(width);
         view.setFitHeight(height);
         return view;
@@ -142,6 +155,10 @@ public class Controller implements Initializable {
 
     private static InputStream getResource(String name) {
         return Controller.class.getResourceAsStream(name);
+    }
+
+    private static void setVisibility(Node node, ObservableBooleanValue source) {
+        node.visibleProperty().bind(source);
     }
 
 }

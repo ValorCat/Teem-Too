@@ -1,8 +1,8 @@
 package teemtoo;
 
-import javafx.beans.binding.StringExpression;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.value.ObservableStringValue;
 import teemtoo.event.Event;
 
 /**
@@ -18,28 +18,24 @@ public class StepTracker extends Tracker<Integer> {
     }
 
     @Override
-    public StringExpression getTotal() {
+    public ObservableStringValue getValue() {
         return steps.asString();
     }
 
     @Override
-    public void handleData(Event event) {
-        super.handleData(event);
-        if (event.isStep()) {
-            addStep();
-        } else {
-            forwardData(event);
-        }
+    protected boolean canHandle(Event event) {
+        return event.isStep();
     }
 
     @Override
-    public void saveAndReset() {
-        log.update(steps.get());
-        steps.set(0);
+    protected void handle(Event event) {
+        steps.set(steps.get() + 1);
     }
 
-    private void addStep() {
-        steps.set(steps.get() + 1);
+    @Override
+    protected void saveAndReset() {
+        log.update(steps.get());
+        steps.set(0);
     }
 
 }

@@ -4,26 +4,38 @@ import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.net.URL;
 
 /**
  * @since 11/17/2017
  */
 public class Main extends Application {
 
-    private static final int WIDTH = 300, HEIGHT = 200;
-    private static final String FXML_NAME = "activity-tracker.fxml";
-
     @Override
-    public void start(Stage primaryStage) throws Exception {
-        Pane window = FXMLLoader.load(Main.class.getResource(FXML_NAME));
-        Scene scene = new Scene(window, WIDTH, HEIGHT);
-        scene.setOnKeyPressed(Controller::handleKeyboard);
+    public void start(Stage primaryStage) {
+        Scene scene = new Scene(getFXML(), Controller.WIDTH, Controller.HEIGHT);
+        scene.setOnKeyPressed(Controller.getInstance()::handleKeyboard);
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
         primaryStage.show();
         getMainTimer().start();
+    }
+
+    private static Pane getFXML() {
+        try {
+            URL resource = Main.class.getResource(Controller.FXML_NAME);
+            return FXMLLoader.load(resource);
+        } catch (IOException e) {
+            Alert error = new Alert(Alert.AlertType.ERROR, "Failed to load FXML data: " + e.getMessage());
+            error.showAndWait();
+            System.exit(1);
+            return new Pane(); // to make the IDE happy
+        }
     }
 
     private static AnimationTimer getMainTimer() {
