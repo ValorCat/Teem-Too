@@ -54,6 +54,10 @@ public final class DataManager {
         return Bindings.createBooleanBinding(() -> current.get().showCalorieInput(), current);
     }
 
+    public ObservableBooleanValue showSleepButton() {
+        return Bindings.createBooleanBinding(() -> current.get().showSleepButton(), current);
+    }
+
     private void setupTrackers() {
         Tracker steps = new StepTracker();
         Tracker heart = new HeartRateTracker();

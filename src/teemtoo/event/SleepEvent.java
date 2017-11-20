@@ -3,16 +3,16 @@ package teemtoo.event;
 /**
  * @since 11/19/2017
  */
-public class FallAsleepEvent extends Event {
+public class SleepEvent extends Event {
 
     private long timestamp;
 
-    public FallAsleepEvent() {
+    public SleepEvent() {
         timestamp = System.currentTimeMillis();
     }
 
     @Override
-    public long getFallAsleepTime() {
+    public long getSleepTimestamp() {
         return timestamp;
     }
 

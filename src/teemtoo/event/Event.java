@@ -19,11 +19,7 @@ public class Event {
         return NO_DATA;
     }
 
-    public long getFallAsleepTime() {
-        return NO_DATA;
-    }
-
-    public long getAwakenTime() {
+    public long getSleepTimestamp() {
         return NO_DATA;
     }
 

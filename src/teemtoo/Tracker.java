@@ -51,4 +51,8 @@ public abstract class Tracker {
         return false;
     }
 
+    public boolean showSleepButton() {
+        return false;
+    }
+
 }

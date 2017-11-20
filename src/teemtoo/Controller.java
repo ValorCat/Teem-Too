@@ -3,6 +3,8 @@ package teemtoo;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -11,8 +13,10 @@ import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 import teemtoo.event.CalorieEvent;
+import teemtoo.event.SleepEvent;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -27,37 +31,30 @@ public class Controller implements Initializable {
 
     private static final String TIME_FORMAT = "h:mm a";
     private static final int[] CALORIE_INTAKE_LEVELS = {1, 10, 50};
+    private static final String NIGHT_MODE_BG = "5F9EA0";
 
     private static Controller instance;
 
+    @FXML private Pane background;
     @FXML private Button menuButton;
     @FXML private Label clock;
     @FXML private Label currentTotal;
     @FXML private Label currentLabel;
     @FXML private Button addCaloriesButton;
     @FXML private Slider addCalorieSlider;
+    @FXML private Button sleepButton;
 
-    private int calorieIntakeAmount = 10;
+    private BooleanProperty inSleepMode = new SimpleBooleanProperty();
+    private int calorieIntakeAmount = CALORIE_INTAKE_LEVELS[1];
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        instance = this;
         setupClock();
         setupCalories();
+        setupSleep();
         menuButton.setGraphic(getImage("hamburger.png", 40, 40));
         displayTracker(DataManager.getInstance().getCurrentTracker());
-        instance = this;
-
-    }
-
-    private void setupCalories() {
-        addCaloriesButton.visibleProperty().bind(DataManager.getInstance().showCalorieInput());
-        addCalorieSlider.visibleProperty().bind(DataManager.getInstance().showCalorieInput());
-        addCalorieSlider.setMax(CALORIE_INTAKE_LEVELS.length - 1);
-        addCalorieSlider.valueProperty().addListener((obs, old, value) -> {
-            int intakeAmount = CALORIE_INTAKE_LEVELS[value.intValue()];
-            addCaloriesButton.setText("+" + intakeAmount);
-            calorieIntakeAmount = intakeAmount;
-        });
     }
 
     public void moveLeft() {
@@ -76,18 +73,12 @@ public class Controller implements Initializable {
         DataManager.getInstance().handleData(new CalorieEvent(calorieIntakeAmount));
     }
 
-    private void setupClock() {
-        DateTimeFormatter format = DateTimeFormatter.ofPattern(TIME_FORMAT);
-        KeyFrame frame1 = new KeyFrame(Duration.seconds(0), e -> clock.setText(LocalTime.now().format(format)));
-        KeyFrame frame2 = new KeyFrame(Duration.seconds(1));
-        Timeline timeline = new Timeline(frame1, frame2);
-        timeline.setCycleCount(Animation.INDEFINITE);
-        timeline.play();
+    public void toggleSleepMode() {
+        DataManager.getInstance().handleData(new SleepEvent());
     }
 
-    private void displayTracker(Tracker tracker) {
-        currentLabel.setText(tracker.getLabel());
-        currentTotal.textProperty().bind(tracker.getTotal());
+    public BooleanProperty inSleepModeProperty() {
+        return inSleepMode;
     }
 
     public static void handleKeyboard(KeyEvent event) {
@@ -99,6 +90,47 @@ public class Controller implements Initializable {
                 instance.moveRight();
                 break;
         }
+    }
+
+    private void setupClock() {
+        DateTimeFormatter format = DateTimeFormatter.ofPattern(TIME_FORMAT);
+        KeyFrame frame1 = new KeyFrame(Duration.seconds(0), e -> clock.setText(LocalTime.now().format(format)));
+        KeyFrame frame2 = new KeyFrame(Duration.seconds(1));
+        Timeline timeline = new Timeline(frame1, frame2);
+        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.play();
+    }
+
+    private void setupCalories() {
+        addCaloriesButton.visibleProperty().bind(DataManager.getInstance().showCalorieInput());
+        addCalorieSlider.visibleProperty().bind(DataManager.getInstance().showCalorieInput());
+        addCalorieSlider.setMax(CALORIE_INTAKE_LEVELS.length - 1);
+        addCalorieSlider.valueProperty().addListener((obs, old, value) -> {
+            int intakeAmount = CALORIE_INTAKE_LEVELS[value.intValue()];
+            addCaloriesButton.setText("+" + intakeAmount);
+            calorieIntakeAmount = intakeAmount;
+        });
+    }
+
+    private void setupSleep() {
+        sleepButton.setGraphic(getImage("moon.png", 40, 35));
+        sleepButton.visibleProperty().bind(DataManager.getInstance().showSleepButton());
+        inSleepMode.addListener((obs, old, asleep) -> {
+            if (asleep) {
+                background.setStyle("-fx-background-color: #" + NIGHT_MODE_BG);
+            } else {
+                background.setStyle("-fx-background-color: #FFFFFF");
+            }
+        });
+    }
+
+    private void displayTracker(Tracker tracker) {
+        currentLabel.setText(tracker.getLabel());
+        currentTotal.textProperty().bind(tracker.getTotal());
+    }
+
+    public static Controller getInstance() {
+        return instance;
     }
 
     private static ImageView getImage(String name, int width, int height) {
