@@ -50,6 +50,7 @@ public class Controller implements Initializable {
     @FXML private Button sleepButton;
 
     private BooleanProperty inSleepMode = new SimpleBooleanProperty();
+    //private BooleanProperty inStatsMode = new SimpleBooleanProperty();
     private int calorieIntakeAmount = CALORIE_INTAKE_LEVELS[1];
 
     @Override
@@ -135,6 +136,16 @@ public class Controller implements Initializable {
 
     private void setupMenu() {
         menuButton.setGraphic(getImage("hamburger", 40, 40));
+        //My attempt to begin programming the statistics menu... didn't work
+        //Need Anthony's help pls
+        /*inStatsMode.addListener((obs, old, active) -> {
+            if (active){
+                System.out.println("Statistics");
+            } else {
+                System.out.println("No statistics");
+            }
+
+        });*/
     }
 
     private void updateTracker() {
