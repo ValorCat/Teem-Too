@@ -1,4 +1,4 @@
-package teemtoo;
+package teemtoo.tracker;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;

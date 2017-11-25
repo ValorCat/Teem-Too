@@ -1,4 +1,4 @@
-package teemtoo;
+package teemtoo.tracker;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
@@ -6,8 +6,10 @@ import javafx.beans.property.LongProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.value.ObservableStringValue;
+import teemtoo.logic.Controller;
 import teemtoo.event.Event;
 import teemtoo.event.ResetEvent;
+import teemtoo.logic.DataManager;
 
 import java.util.concurrent.TimeUnit;
 

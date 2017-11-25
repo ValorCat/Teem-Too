@@ -1,4 +1,4 @@
-package teemtoo;
+package teemtoo.logic;
 
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -19,6 +19,7 @@ import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 import teemtoo.event.CalorieEvent;
 import teemtoo.event.SleepEvent;
+import teemtoo.tracker.Tracker;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -61,14 +62,19 @@ public class Controller implements Initializable {
         updateTracker();
     }
 
+
     public void moveLeft() {
-        DataManager.getInstance().previousTracker();
-        updateTracker();
+        if (!inSleepModeProperty().get()) {
+            DataManager.getInstance().previousTracker();
+            updateTracker();
+        }
     }
 
     public void moveRight() {
-        DataManager.getInstance().nextTracker();
-        updateTracker();
+        if (!inSleepModeProperty().get()) {
+            DataManager.getInstance().nextTracker();
+            updateTracker();
+        }
     }
 
     public void addCalories() {

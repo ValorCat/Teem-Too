@@ -1,4 +1,4 @@
-package teemtoo;
+package teemtoo.tracker;
 
 import javafx.beans.value.ObservableStringValue;
 import teemtoo.event.Event;

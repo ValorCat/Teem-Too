@@ -1,10 +1,14 @@
-package teemtoo;
+package teemtoo.logic;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableBooleanValue;
 import teemtoo.event.Event;
+import teemtoo.sensor.Pedometer;
+import teemtoo.sensor.PulseReader;
+import teemtoo.sensor.Sensor;
+import teemtoo.tracker.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -12,6 +16,8 @@ import java.util.List;
 /**
  * @since 11/17/2017
  */
+
+//Controller of Trackers
 public final class DataManager {
 
     private static DataManager instance = new DataManager();

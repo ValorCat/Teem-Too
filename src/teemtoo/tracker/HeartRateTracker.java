@@ -1,4 +1,4 @@
-package teemtoo;
+package teemtoo.tracker;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;

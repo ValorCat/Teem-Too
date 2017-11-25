@@ -1,4 +1,4 @@
-package teemtoo;
+package teemtoo.tracker;
 
 import java.util.Deque;
 import java.util.LinkedList;
