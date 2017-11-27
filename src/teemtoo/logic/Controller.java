@@ -11,6 +11,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -19,6 +20,7 @@ import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 import teemtoo.event.CalorieEvent;
 import teemtoo.event.SleepEvent;
+import teemtoo.tracker.DataLog;
 import teemtoo.tracker.Tracker;
 
 import java.io.InputStream;
@@ -48,8 +50,10 @@ public class Controller implements Initializable {
     @FXML private Button addCaloriesButton;
     @FXML private Slider addCalorieSlider;
     @FXML private Button sleepButton;
+    @FXML private ListView<String> stats;
 
     private BooleanProperty inSleepMode = new SimpleBooleanProperty();
+    private BooleanProperty isStatsMenuOpen = new SimpleBooleanProperty();
     private int calorieIntakeAmount = CALORIE_INTAKE_LEVELS[1];
 
     @Override
@@ -78,8 +82,14 @@ public class Controller implements Initializable {
     }
 
     public void openMenu() {
-        // any code here will run when the menu opens
-        System.out.println("Statistics open");
+        isStatsMenuOpen.set(!isStatsMenuOpen.get());
+        stats.getItems().clear();
+        DataLog log = DataManager.getInstance().getCurrentLog();
+        // log has statistical data for the current tracker
+        // stats.getItems() is a string list that is shown to the user
+        stats.getItems().add("Yesterday: " + log.getLastDay().orElse("---"));
+        // we just need to use log.getAverage() to add some more lines to the
+        // stats view for, say, 3 days, 7 days, 2 weeks, etc.
     }
 
     public void addCalories() {
@@ -140,6 +150,7 @@ public class Controller implements Initializable {
 
     private void setupMenu() {
         menuButton.setGraphic(getImage("hamburger", 40, 40));
+        setVisibility(stats, isStatsMenuOpen);
     }
 
     private void updateTracker() {

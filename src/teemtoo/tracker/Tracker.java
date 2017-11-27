@@ -47,6 +47,10 @@ public abstract class Tracker<NumType extends Number> {
         return next;
     }
 
+    public DataLog<NumType> getLog() {
+        return log;
+    }
+
     public void link(Tracker next) {
         this.next = next;
         next.previous = this;

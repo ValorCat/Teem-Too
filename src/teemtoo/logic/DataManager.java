@@ -48,6 +48,10 @@ public final class DataManager {
         return current.get();
     }
 
+    public DataLog getCurrentLog() {
+        return current.get().getLog();
+    }
+
     public List<Sensor> getSensors() {
         return sensors;
     }

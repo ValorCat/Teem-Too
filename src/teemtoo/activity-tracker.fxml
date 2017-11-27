@@ -4,9 +4,9 @@
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<AnchorPane fx:id="background" onSwipeLeft="#moveRight" onSwipeRight="#moveLeft" prefHeight="200.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="teemtoo.logic.Controller">
+<AnchorPane fx:id="background" onSwipeLeft="#moveRight" onSwipeRight="#moveLeft" prefHeight="200.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="teemtoo.logic.Controller">
    <children>
-      <Button fx:id="menuButton" onAction="#openMenu" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" graphicTextGap="0.0" layoutX="116.0" layoutY="64.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" wrapText="true" AnchorPane.leftAnchor="-2.0" AnchorPane.topAnchor="-2.0">
+      <Button fx:id="menuButton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" graphicTextGap="0.0" layoutX="116.0" layoutY="64.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#openMenu" prefHeight="50.0" prefWidth="50.0" wrapText="true" AnchorPane.leftAnchor="-2.0" AnchorPane.topAnchor="-2.0">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
@@ -48,5 +48,6 @@
             <Font name="System Bold" size="22.0" />
          </font>
       </Button>
+      <ListView fx:id="stats" focusTraversable="false" layoutY="47.0" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="153.0" prefWidth="300.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="48.0" />
    </children>
 </AnchorPane>
