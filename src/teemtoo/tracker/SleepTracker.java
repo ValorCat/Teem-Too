@@ -46,7 +46,8 @@ public class SleepTracker extends Tracker<Long> {
                 long duration = lastDuration.get();
                 long hours = TimeUnit.MILLISECONDS.toHours(duration);
                 long minutes = TimeUnit.MILLISECONDS.toMinutes(duration);
-                return String.format("%2d:%02d", hours, minutes - TimeUnit.MINUTES.toMinutes(hours));
+                long seconds = TimeUnit.MILLISECONDS.toSeconds(duration);
+                return formatDuration(hours, minutes, seconds);
             }
         }, lastFallAsleepTime, lastDuration, inSleepMode);
     }
@@ -80,6 +81,13 @@ public class SleepTracker extends Tracker<Long> {
     @Override
     public boolean showSleepButton() {
         return true;
+    }
+
+    private static String formatDuration(long hours, long minutes, long seconds) {
+        return String.format("%2d:%02d:%02d",
+                hours,
+                minutes - TimeUnit.MINUTES.toMinutes(hours),
+                seconds - TimeUnit.SECONDS.toSeconds(minutes));
     }
 
 }
