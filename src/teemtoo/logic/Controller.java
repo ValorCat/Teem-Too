@@ -53,7 +53,7 @@ public class Controller implements Initializable {
     @FXML private ListView<String> stats;
 
     private BooleanProperty inSleepMode = new SimpleBooleanProperty();
-    private BooleanProperty isStatsMenuOpen = new SimpleBooleanProperty();
+    private BooleanProperty inStatsMenu = new SimpleBooleanProperty();
     private int calorieIntakeAmount = CALORIE_INTAKE_LEVELS[1];
 
     @Override
@@ -68,28 +68,43 @@ public class Controller implements Initializable {
 
 
     public void moveLeft() {
-        if (!inSleepModeProperty().get()) {
+        if (!isInSleepMode()) {
             DataManager.getInstance().previousTracker();
             updateTracker();
+        }
+        if (isInStatsMenu()) {
+            updateStatsMenu();
         }
     }
 
     public void moveRight() {
-        if (!inSleepModeProperty().get()) {
+        if (!isInSleepMode()) {
             DataManager.getInstance().nextTracker();
             updateTracker();
         }
+        if (isInStatsMenu()) {
+            updateStatsMenu();
+        }
     }
 
-    public void openMenu() {
-        isStatsMenuOpen.set(!isStatsMenuOpen.get());
-        stats.getItems().clear();
+    public void toggleStatsMenu() {
+        if (!isInSleepMode()) {
+            inStatsMenu.set(!isInStatsMenu());
+            if (isInStatsMenu()) {
+                updateStatsMenu();
+            }
+        }
+    }
+
+    private void updateStatsMenu() {
         DataLog log = DataManager.getInstance().getCurrentLog();
-        // log has statistical data for the current tracker
-        // stats.getItems() is a string list that is shown to the user
-        stats.getItems().add("Yesterday: " + log.getLastDay().orElse("---"));
-        // we just need to use log.getAverage() to add some more lines to the
-        // stats view for, say, 3 days, 7 days, 2 weeks, etc.
+        stats.getItems().clear();
+        stats.getItems().addAll(
+                "Yesterday:  " + log.getLastDay(),
+                "Last 3 days:  " + log.getAverage(3),
+                "Last week:  " + log.getAverage(7),
+                "Last month:  " + log.getAverage(30)
+        );
     }
 
     public void addCalories() {
@@ -150,7 +165,8 @@ public class Controller implements Initializable {
 
     private void setupMenu() {
         menuButton.setGraphic(getImage("hamburger", 40, 40));
-        setVisibility(stats, isStatsMenuOpen);
+        setVisibility(stats, inStatsMenu);
+        stats.setStyle("-fx-font: 15pt System");
     }
 
     private void updateTracker() {
@@ -181,6 +197,14 @@ public class Controller implements Initializable {
 
     private static void setVisibility(Node node, ObservableBooleanValue source) {
         node.visibleProperty().bind(source);
+    }
+
+    private boolean isInSleepMode() {
+        return inSleepMode.get();
+    }
+
+    private boolean isInStatsMenu() {
+        return inStatsMenu.get();
     }
 
 }

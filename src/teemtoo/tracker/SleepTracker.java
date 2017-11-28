@@ -6,9 +6,9 @@ import javafx.beans.property.LongProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.value.ObservableStringValue;
-import teemtoo.logic.Controller;
 import teemtoo.event.Event;
 import teemtoo.event.ResetEvent;
+import teemtoo.logic.Controller;
 import teemtoo.logic.DataManager;
 
 import java.util.concurrent.TimeUnit;
@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class SleepTracker extends Tracker<Long> {
 
-    private static final int MIN_SLEEP_THRESHOLD = 5000;
+    private static final int MIN_SLEEP_THRESHOLD = /*5000*/ 0; // todo reset after demo
 
     private LongProperty lastFallAsleepTime;
     private LongProperty lastDuration;
