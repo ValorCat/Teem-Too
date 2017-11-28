@@ -14,7 +14,7 @@ public class HeartRateTracker extends Tracker<Double> {
     private DoubleProperty bpm;
 
     public HeartRateTracker() {
-        super("Heart Rate");
+        super("Heart Rate", Tracker.NUMBER_FORMATTER, false);
         bpm = new SimpleDoubleProperty(80);
     }
 

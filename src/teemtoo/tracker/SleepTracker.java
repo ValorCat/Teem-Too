@@ -25,7 +25,7 @@ public class SleepTracker extends Tracker<Long> {
     private BooleanProperty inSleepMode;
 
     public SleepTracker() {
-        super("Sleep Duration");
+        super("Sleep Duration", value -> formatDuration(value.longValue()), false);
         lastFallAsleepTime = new SimpleLongProperty(-1);
         lastDuration = new SimpleLongProperty();
         inSleepMode = new SimpleBooleanProperty();
@@ -43,11 +43,7 @@ public class SleepTracker extends Tracker<Long> {
                 return "---";
             } else {
                 // has slept before
-                long duration = lastDuration.get();
-                long hours = TimeUnit.MILLISECONDS.toHours(duration);
-                long minutes = TimeUnit.MILLISECONDS.toMinutes(duration);
-                long seconds = TimeUnit.MILLISECONDS.toSeconds(duration);
-                return formatDuration(hours, minutes, seconds);
+                return formatDuration(lastDuration.get());
             }
         }, lastFallAsleepTime, lastDuration, inSleepMode);
     }
@@ -81,6 +77,13 @@ public class SleepTracker extends Tracker<Long> {
     @Override
     public boolean showSleepButton() {
         return true;
+    }
+
+    private static String formatDuration(long duration) {
+        long hours = TimeUnit.MILLISECONDS.toHours(duration);
+        long minutes = TimeUnit.MILLISECONDS.toMinutes(duration);
+        long seconds = TimeUnit.MILLISECONDS.toSeconds(duration);
+        return formatDuration(hours, minutes, seconds);
     }
 
     private static String formatDuration(long hours, long minutes, long seconds) {
