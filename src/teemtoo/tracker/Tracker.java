@@ -1,21 +1,25 @@
-package teemtoo;
+package teemtoo.tracker;
 
 import javafx.beans.value.ObservableStringValue;
 import teemtoo.event.Event;
+
+import java.util.function.Function;
 
 /**
  * @since 11/17/2017
  */
 public abstract class Tracker<NumType extends Number> {
 
+    public static final Function<Number,String> NUMBER_FORMATTER = value -> String.format("%.1f", value.doubleValue());
+
     private String label;
     private Tracker previous, next;
     private boolean isEndOfChain;
     protected DataLog<NumType> log;
 
-    public Tracker(String label) {
+    public Tracker(String label, Function<Number,String> formatter, boolean showIntIfPossible) {
         this.label = label;
-        this.log = new DataLog<>();
+        this.log = new DataLog<>(formatter, showIntIfPossible);
     }
 
     public abstract ObservableStringValue getValue();
@@ -45,6 +49,10 @@ public abstract class Tracker<NumType extends Number> {
 
     public Tracker getNext() {
         return next;
+    }
+
+    public DataLog<NumType> getLog() {
+        return log;
     }
 
     public void link(Tracker next) {

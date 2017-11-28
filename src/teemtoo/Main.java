@@ -7,6 +7,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import teemtoo.logic.*;
+import teemtoo.sensor.Sensor;
 
 import java.io.IOException;
 import java.net.URL;
