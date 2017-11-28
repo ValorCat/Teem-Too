@@ -68,14 +68,14 @@ public class Controller implements Initializable {
 
 
     public void moveLeft() {
-        if (!inSleepModeProperty().get()) {
+        if (!inSleepMode.get() && !isStatsMenuOpen.get()) {
             DataManager.getInstance().previousTracker();
             updateTracker();
         }
     }
 
     public void moveRight() {
-        if (!inSleepModeProperty().get()) {
+        if (!inSleepModeProperty().get() && !isStatsMenuOpen.get()) {
             DataManager.getInstance().nextTracker();
             updateTracker();
         }
