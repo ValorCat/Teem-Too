@@ -1,4 +1,4 @@
-package teemtoo.tracker;
+package teemtoo;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -13,7 +13,7 @@ public class StepTracker extends Tracker<Integer> {
     private IntegerProperty steps;
 
     public StepTracker() {
-        super("Steps Today", Tracker.NUMBER_FORMATTER, true);
+        super("Steps Today");
         steps = new SimpleIntegerProperty();
     }
 

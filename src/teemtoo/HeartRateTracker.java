@@ -1,4 +1,4 @@
-package teemtoo.tracker;
+package teemtoo;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
@@ -14,7 +14,7 @@ public class HeartRateTracker extends Tracker<Double> {
     private DoubleProperty bpm;
 
     public HeartRateTracker() {
-        super("Heart Rate", Tracker.NUMBER_FORMATTER, false);
+        super("Heart Rate");
         bpm = new SimpleDoubleProperty(80);
     }
 
