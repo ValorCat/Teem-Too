@@ -1,4 +1,4 @@
-package teemtoo.sensor;
+package teemtoo;
 
 import teemtoo.event.HeartEvent;
 

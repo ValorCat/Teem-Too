@@ -1,4 +1,4 @@
-package teemtoo.sensor;
+package teemtoo;
 
 import teemtoo.event.Event;
 import teemtoo.event.StepEvent;
@@ -12,7 +12,7 @@ public class Pedometer implements Sensor {
 
     @Override
     public void poll() {
-        if (Math.random() < .01) {
+        if (Math.random() < .005) {
             Event step = new StepEvent();
             update(step);
         }

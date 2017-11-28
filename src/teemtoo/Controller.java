@@ -1,4 +1,4 @@
-package teemtoo.logic;
+package teemtoo;
 
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -11,7 +11,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -20,8 +19,6 @@ import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 import teemtoo.event.CalorieEvent;
 import teemtoo.event.SleepEvent;
-import teemtoo.tracker.DataLog;
-import teemtoo.tracker.Tracker;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -50,10 +47,8 @@ public class Controller implements Initializable {
     @FXML private Button addCaloriesButton;
     @FXML private Slider addCalorieSlider;
     @FXML private Button sleepButton;
-    @FXML private ListView<String> stats;
 
     private BooleanProperty inSleepMode = new SimpleBooleanProperty();
-    private BooleanProperty inStatsMenu = new SimpleBooleanProperty();
     private int calorieIntakeAmount = CALORIE_INTAKE_LEVELS[1];
 
     @Override
@@ -66,45 +61,14 @@ public class Controller implements Initializable {
         updateTracker();
     }
 
-
     public void moveLeft() {
-        if (!inSleepMode.get() && !inStatsMenu.get()) {
-            DataManager.getInstance().previousTracker();
-            updateTracker();
-        }
-        if (isInStatsMenu()) {
-            updateStatsMenu();
-        }
+        DataManager.getInstance().previousTracker();
+        updateTracker();
     }
 
     public void moveRight() {
-        if (!inSleepModeProperty().get() && !inStatsMenu.get()) {
-            DataManager.getInstance().nextTracker();
-            updateTracker();
-        }
-        if (isInStatsMenu()) {
-            updateStatsMenu();
-        }
-    }
-
-    public void toggleStatsMenu() {
-        if (!isInSleepMode()) {
-            inStatsMenu.set(!isInStatsMenu());
-            if (isInStatsMenu()) {
-                updateStatsMenu();
-            }
-        }
-    }
-
-    private void updateStatsMenu() {
-        DataLog log = DataManager.getInstance().getCurrentLog();
-        stats.getItems().clear();
-        stats.getItems().addAll(
-                "Yesterday:  " + log.getLastDay(),
-                "Last 3 days:  " + log.getAverage(3),
-                "Last week:  " + log.getAverage(7),
-                "Last month:  " + log.getAverage(30)
-        );
+        DataManager.getInstance().nextTracker();
+        updateTracker();
     }
 
     public void addCalories() {
@@ -165,8 +129,6 @@ public class Controller implements Initializable {
 
     private void setupMenu() {
         menuButton.setGraphic(getImage("hamburger", 40, 40));
-        setVisibility(stats, inStatsMenu);
-        stats.setStyle("-fx-font: 15pt System");
     }
 
     private void updateTracker() {
@@ -197,14 +159,6 @@ public class Controller implements Initializable {
 
     private static void setVisibility(Node node, ObservableBooleanValue source) {
         node.visibleProperty().bind(source);
-    }
-
-    private boolean isInSleepMode() {
-        return inSleepMode.get();
-    }
-
-    private boolean isInStatsMenu() {
-        return inStatsMenu.get();
     }
 
 }

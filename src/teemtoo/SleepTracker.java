@@ -1,4 +1,4 @@
-package teemtoo.tracker;
+package teemtoo;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
@@ -8,8 +8,6 @@ import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.value.ObservableStringValue;
 import teemtoo.event.Event;
 import teemtoo.event.ResetEvent;
-import teemtoo.logic.Controller;
-import teemtoo.logic.DataManager;
 
 import java.util.concurrent.TimeUnit;
 
@@ -18,14 +16,14 @@ import java.util.concurrent.TimeUnit;
  */
 public class SleepTracker extends Tracker<Long> {
 
-    private static final int MIN_SLEEP_THRESHOLD = /*5000*/ 0; // todo reset after demo
+    private static final int MIN_SLEEP_THRESHOLD = 5000;
 
     private LongProperty lastFallAsleepTime;
     private LongProperty lastDuration;
     private BooleanProperty inSleepMode;
 
     public SleepTracker() {
-        super("Sleep Duration", value -> formatDuration(value.longValue()), false);
+        super("Sleep Duration");
         lastFallAsleepTime = new SimpleLongProperty(-1);
         lastDuration = new SimpleLongProperty();
         inSleepMode = new SimpleBooleanProperty();
@@ -43,7 +41,10 @@ public class SleepTracker extends Tracker<Long> {
                 return "---";
             } else {
                 // has slept before
-                return formatDuration(lastDuration.get());
+                long duration = lastDuration.get();
+                long hours = TimeUnit.MILLISECONDS.toHours(duration);
+                long minutes = TimeUnit.MILLISECONDS.toMinutes(duration);
+                return String.format("%2d:%02d", hours, minutes - TimeUnit.MINUTES.toMinutes(hours));
             }
         }, lastFallAsleepTime, lastDuration, inSleepMode);
     }
@@ -77,20 +78,6 @@ public class SleepTracker extends Tracker<Long> {
     @Override
     public boolean showSleepButton() {
         return true;
-    }
-
-    private static String formatDuration(long duration) {
-        long hours = TimeUnit.MILLISECONDS.toHours(duration);
-        long minutes = TimeUnit.MILLISECONDS.toMinutes(duration);
-        long seconds = TimeUnit.MILLISECONDS.toSeconds(duration);
-        return formatDuration(hours, minutes, seconds);
-    }
-
-    private static String formatDuration(long hours, long minutes, long seconds) {
-        return String.format("%2d:%02d:%02d",
-                hours,
-                minutes - TimeUnit.MINUTES.toMinutes(hours),
-                seconds - TimeUnit.SECONDS.toSeconds(minutes));
     }
 
 }

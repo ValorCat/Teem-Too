@@ -1,4 +1,4 @@
-package teemtoo.tracker;
+package teemtoo;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -13,7 +13,7 @@ public class CalorieTracker extends Tracker<Integer> {
     private IntegerProperty calories;
 
     public CalorieTracker() {
-        super("Calories Today", Tracker.NUMBER_FORMATTER, true);
+        super("Calories Today");
         calories = new SimpleIntegerProperty();
     }
 
