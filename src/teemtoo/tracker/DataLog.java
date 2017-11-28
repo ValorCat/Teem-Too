@@ -2,7 +2,6 @@ package teemtoo.tracker;
 
 import java.util.Deque;
 import java.util.LinkedList;
-import java.util.Optional;
 import java.util.OptionalDouble;
 
 /**
@@ -11,19 +10,26 @@ import java.util.OptionalDouble;
 public class DataLog<NumType extends Number> {
 
     private static final int FULL_SIZE = 30;
+    private static final String EMPTY_VALUE = "---";
 
     private Deque<NumType> month = new LinkedList<>();
 
-    public Optional<NumType> getLastDay() {
-        return Optional.ofNullable(month.isEmpty() ? null : month.getLast());
+    public String getLastDay() {
+        return month.isEmpty() ? EMPTY_VALUE : month.getLast().toString();
     }
 
-    public OptionalDouble getAverage(int numDays) {
-        assert numDays > 0 && numDays <= 30;
-        return month.stream()
-                .limit(numDays)
-                .mapToDouble(Number::doubleValue)
-                .average();
+    public String getAverage(int numDays) {
+        OptionalDouble average = getAverageRaw(numDays);
+        String output;
+        if (average.isPresent()) {
+            output = String.format("%.1f", average.getAsDouble());
+            if (output.endsWith(".0")) {
+                output = output.substring(0, output.length() - 2);
+            }
+        } else {
+            output = EMPTY_VALUE;
+        }
+        return output;
     }
 
     public void update(NumType value) {
@@ -31,6 +37,14 @@ public class DataLog<NumType extends Number> {
             month.removeLast();
         }
         month.addFirst(value);
+    }
+
+    private OptionalDouble getAverageRaw(int numDays) {
+        assert numDays > 0 && numDays <= 30;
+        return month.stream()
+                .limit(numDays)
+                .mapToDouble(Number::doubleValue)
+                .average();
     }
 
     private boolean isFull() {
