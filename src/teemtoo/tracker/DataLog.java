@@ -13,12 +13,12 @@ public class DataLog<NumType extends Number> {
     private static final int FULL_SIZE = 30;
     private static final String EMPTY_VALUE = "---";
 
-    private Deque<NumType> month;
+    private Deque<NumType> data;
     private Function<Number,String> formatter;
     private boolean showIntIfPossible;
 
     public DataLog(Function<Number, String> formatter, boolean showIntIfPossible) {
-        this.month = new LinkedList<>();
+        this.data = new LinkedList<>();
         this.formatter = formatter;
         this.showIntIfPossible = showIntIfPossible;
     }
@@ -32,31 +32,31 @@ public class DataLog<NumType extends Number> {
     }
 
     public String getLastDay() {
-        return month.isEmpty() ? EMPTY_VALUE : format(month.getLast());
+        return data.isEmpty() ? EMPTY_VALUE : format(data.getLast());
     }
 
-    public String getAverage(int numDays) {
-        OptionalDouble average = getAverageRaw(numDays);
+    public String getAverage(int period) {
+        OptionalDouble average = getAverageRaw(period);
         return average.isPresent() ? format(average.getAsDouble()) : EMPTY_VALUE;
     }
 
     public void update(NumType value) {
         if (isFull()) {
-            month.removeLast();
+            data.removeLast();
         }
-        month.addFirst(value);
+        data.addFirst(value);
     }
 
-    private OptionalDouble getAverageRaw(int numDays) {
-        assert numDays > 0 && numDays <= 30;
-        return month.stream()
-                .limit(numDays)
+    private OptionalDouble getAverageRaw(int period) {
+        assert period > 0 && period <= 30;
+        return data.stream()
+                .limit(period)
                 .mapToDouble(Number::doubleValue)
                 .average();
     }
 
     private boolean isFull() {
-        return month.size() == FULL_SIZE;
+        return data.size() == FULL_SIZE;
     }
 
 }
