@@ -61,7 +61,7 @@ public class Controller implements Initializable {
 
     private ImageView menuIcon = getImage("hamburger", 40, 40);
     private ImageView moonIcon = getImage("moon", 40, 35);
-    private ImageView lockIcon = getImage("lock", 40, 40);
+    private ImageView sunIcon = getImage("sunrise", 40, 30);
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -122,7 +122,7 @@ public class Controller implements Initializable {
 
     public void toggleSleepMode() {
         boolean asleep = isInSleepMode();
-        sleepButton.setGraphic(asleep ? moonIcon : lockIcon);
+        sleepButton.setGraphic(asleep ? moonIcon : sunIcon);
         setTextColor(currentValue, asleep ? CURRENT_VALUE_DAY_COLOR : CURRENT_VALUE_NIGHT_COLOR);
         setBackgroundColor(asleep ? DAY_MODE_COLOR : NIGHT_MODE_COLOR);
         DataManager.getInstance().handle(new SleepEvent());

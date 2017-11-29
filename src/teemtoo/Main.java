@@ -7,7 +7,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import teemtoo.logic.*;
+import teemtoo.logic.Controller;
+import teemtoo.logic.DataManager;
 import teemtoo.sensor.Sensor;
 
 import java.io.IOException;
@@ -18,11 +19,14 @@ import java.net.URL;
  */
 public class Main extends Application {
 
+    private static final String TITLE = "Activity Tracker Emulator";
+
     @Override
     public void start(Stage primaryStage) {
         Scene scene = new Scene(getFXML(), Controller.WIDTH, Controller.HEIGHT);
         scene.setOnKeyPressed(Controller.getInstance()::handleKeyboard);
         primaryStage.setScene(scene);
+        primaryStage.setTitle(TITLE);
         primaryStage.setResizable(false);
         primaryStage.show();
         getMainTimer().start();
