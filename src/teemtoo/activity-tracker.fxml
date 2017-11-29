@@ -4,30 +4,30 @@
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<AnchorPane fx:id="background" onSwipeLeft="#moveRight" onSwipeRight="#moveLeft" prefHeight="200.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="teemtoo.logic.Controller">
+<AnchorPane fx:id="background" onSwipeLeft="#moveRight" onSwipeRight="#moveLeft" prefHeight="200.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="teemtoo.logic.Controller">
    <children>
       <Button fx:id="menuButton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" graphicTextGap="0.0" layoutX="116.0" layoutY="64.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#toggleStatsMenu" prefHeight="50.0" prefWidth="50.0" wrapText="true" AnchorPane.leftAnchor="-2.0" AnchorPane.topAnchor="-2.0">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
-      <Label fx:id="clock" alignment="CENTER_RIGHT" layoutX="158.0" layoutY="85.0" text="12:00 AM" textOverrun="CLIP" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="5.0">
+      <Label fx:id="clock" alignment="CENTER_RIGHT" layoutX="158.0" layoutY="85.0" text="12:00 AM" textFill="#7575bd" textOverrun="CLIP" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="5.0">
          <font>
             <Font name="System Bold" size="24.0" />
          </font>
       </Label>
-      <Label fx:id="currentLabel" alignment="CENTER" layoutX="86.0" layoutY="76.0" text="Steps Today" textAlignment="CENTER" textOverrun="CLIP" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="150.0">
+      <Label fx:id="currentLabel" alignment="CENTER" layoutX="86.0" layoutY="76.0" text="Steps Today" textAlignment="CENTER" textFill="#6c6c6c" textOverrun="CLIP" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="150.0">
          <font>
             <Font size="25.0" />
          </font>
       </Label>
-      <Separator prefWidth="200.0" AnchorPane.bottomAnchor="65.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" />
-      <Label fx:id="currentValue" alignment="CENTER" layoutX="96.0" layoutY="86.0" text="0" textAlignment="CENTER" textOverrun="CLIP" AnchorPane.bottomAnchor="65.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      <Separator fx:id="separator" prefWidth="200.0" AnchorPane.bottomAnchor="65.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" />
+      <Label fx:id="currentValue" alignment="CENTER" layoutX="96.0" layoutY="86.0" text="0" textAlignment="CENTER" textFill="#805c7e" textOverrun="CLIP" AnchorPane.bottomAnchor="65.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <font>
             <Font size="60.0" />
          </font>
       </Label>
-      <Button fx:id="addCaloriesButton" contentDisplay="TEXT_ONLY" focusTraversable="false" graphicTextGap="0.0" layoutX="126.0" layoutY="74.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#addCalories" prefHeight="40.0" text="+10" wrapText="true" AnchorPane.bottomAnchor="90.0" AnchorPane.rightAnchor="10.0">
+      <Button fx:id="addCaloriesButton" contentDisplay="TEXT_ONLY" focusTraversable="false" graphicTextGap="0.0" layoutX="126.0" layoutY="74.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#addCalories" prefHeight="40.0" text="+10" textFill="#686767" wrapText="true" AnchorPane.bottomAnchor="90.0" AnchorPane.rightAnchor="10.0">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>

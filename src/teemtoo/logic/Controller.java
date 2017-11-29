@@ -9,10 +9,7 @@ import javafx.beans.value.ObservableBooleanValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.Slider;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
@@ -39,7 +36,11 @@ public class Controller implements Initializable {
     public static final String FXML_NAME = "activity-tracker.fxml";
     private static final String TIME_FORMAT = "h:mm a";
     private static final int[] CALORIE_INTAKE_LEVELS = {1, 10, 50};
-    private static final String NIGHT_MODE_COLOR = "5F9EA0";
+
+    private static final String DAY_MODE_COLOR = "EAEAEA";
+    private static final String NIGHT_MODE_COLOR = "0A5787";
+    private static final String CURRENT_VALUE_DAY_COLOR = "805C7E";
+    private static final String CURRENT_VALUE_NIGHT_COLOR = "456F9A";
 
     private static Controller instance;
 
@@ -48,6 +49,7 @@ public class Controller implements Initializable {
     @FXML private Label clock;
     @FXML private Label currentValue;
     @FXML private Label currentLabel;
+    @FXML private Separator separator;
     @FXML private Button addCaloriesButton;
     @FXML private Slider addCalorieSlider;
     @FXML private Button sleepButton;
@@ -69,6 +71,10 @@ public class Controller implements Initializable {
         setupSleep();
         setupMenu();
         updateTracker();
+        setBackgroundColor(DAY_MODE_COLOR);
+        setTextColor(currentValue, CURRENT_VALUE_DAY_COLOR);
+        currentLabel.visibleProperty().bind(inSleepMode.not());
+        separator.visibleProperty().bind(inSleepMode.not());
     }
 
 
@@ -115,7 +121,10 @@ public class Controller implements Initializable {
     }
 
     public void toggleSleepMode() {
-        sleepButton.setGraphic(isInSleepMode() ? moonIcon : lockIcon);
+        boolean asleep = isInSleepMode();
+        sleepButton.setGraphic(asleep ? moonIcon : lockIcon);
+        setTextColor(currentValue, asleep ? CURRENT_VALUE_DAY_COLOR : CURRENT_VALUE_NIGHT_COLOR);
+        setBackgroundColor(asleep ? DAY_MODE_COLOR : NIGHT_MODE_COLOR);
         DataManager.getInstance().handle(new SleepEvent());
     }
 
@@ -161,13 +170,6 @@ public class Controller implements Initializable {
     private void setupSleep() {
         sleepButton.setGraphic(moonIcon);
         setVisibility(sleepButton, DataManager.getInstance().showSleepButton());
-        inSleepMode.addListener((obs, old, asleep) -> {
-            if (asleep) {
-                setBackgroundColor(NIGHT_MODE_COLOR);
-            } else {
-                setBackgroundColor("FFFFFF");
-            }
-        });
     }
 
     private void setupMenu() {
@@ -185,6 +187,10 @@ public class Controller implements Initializable {
 
     private void setBackgroundColor(String hexColor) {
         background.setStyle("-fx-background-color: #" + hexColor);
+    }
+
+    private static void setTextColor(Node node, String hexColor) {
+        node.setStyle("-fx-text-fill: #" + hexColor);
     }
 
     public static Controller getInstance() {
