@@ -20,6 +20,7 @@ import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 import teemtoo.event.CalorieEvent;
 import teemtoo.event.SleepEvent;
+import teemtoo.event.StepEvent;
 import teemtoo.tracker.DataLog;
 import teemtoo.tracker.Tracker;
 
@@ -129,6 +130,9 @@ public class Controller implements Initializable {
                 break;
             case RIGHT:
                 moveRight();
+                break;
+            case S:
+                DataManager.getInstance().handle(new StepEvent());
                 break;
         }
     }
