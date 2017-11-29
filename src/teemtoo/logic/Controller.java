@@ -60,6 +60,10 @@ public class Controller implements Initializable {
     private BooleanProperty inStatsMenu = new SimpleBooleanProperty();
     private int calorieIntakeAmount = CALORIE_INTAKE_LEVELS[1];
 
+    private ImageView menuIcon = getImage("hamburger", 40, 40);
+    private ImageView moonIcon = getImage("moon", 40, 35);
+    private ImageView lockIcon = getImage("lock", 40, 40);
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         instance = this;
@@ -74,7 +78,7 @@ public class Controller implements Initializable {
     //Switch to tracker to the "left"
     //(moveLeft() and moveRight() will only work if the user is not asleep or looking at stats)
     public void moveLeft() {
-        if (!inSleepMode.get() && !inStatsMenu.get()) {
+        if (!inSleepMode.get()) {
             DataManager.getInstance().previousTracker();
             updateTracker();
         }
@@ -85,7 +89,7 @@ public class Controller implements Initializable {
 
     //Switch to tracker to the "right"
     public void moveRight() {
-        if (!inSleepModeProperty().get() && !inStatsMenu.get()) {
+        if (!inSleepModeProperty().get()) {
             DataManager.getInstance().nextTracker();
             updateTracker();
         }
@@ -96,11 +100,9 @@ public class Controller implements Initializable {
 
     //Opens stats menu
     public void toggleStatsMenu() {
-        if (!isInSleepMode()) {
-            inStatsMenu.set(!isInStatsMenu());
-            if (isInStatsMenu()) {
-                updateStatsMenu();
-            }
+        inStatsMenu.set(!isInStatsMenu());
+        if (isInStatsMenu()) {
+            updateStatsMenu();
         }
     }
 
@@ -120,6 +122,7 @@ public class Controller implements Initializable {
     }
 
     public void toggleSleepMode() {
+        sleepButton.setGraphic(isInSleepMode() ? moonIcon : lockIcon);
         DataManager.getInstance().handle(new SleepEvent());
     }
 
@@ -160,7 +163,7 @@ public class Controller implements Initializable {
     }
 
     private void setupSleep() {
-        sleepButton.setGraphic(getImage("moon", 40, 35));
+        sleepButton.setGraphic(moonIcon);
         setVisibility(sleepButton, DataManager.getInstance().showSleepButton());
         inSleepMode.addListener((obs, old, asleep) -> {
             if (asleep) {
@@ -172,7 +175,8 @@ public class Controller implements Initializable {
     }
 
     private void setupMenu() {
-        menuButton.setGraphic(getImage("hamburger", 40, 40));
+        menuButton.setGraphic(menuIcon);
+        menuButton.disableProperty().bind(inSleepMode);
         setVisibility(stats, inStatsMenu);
         stats.setStyle("-fx-font: 15pt System");
     }
