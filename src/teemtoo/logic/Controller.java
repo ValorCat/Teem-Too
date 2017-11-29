@@ -68,7 +68,7 @@ public class Controller implements Initializable {
 
 
     public void moveLeft() {
-        if (!inSleepMode.get() && !inStatsMenu.get()) {
+        if (!inSleepMode.get()) {
             DataManager.getInstance().previousTracker();
             updateTracker();
         }
@@ -78,7 +78,7 @@ public class Controller implements Initializable {
     }
 
     public void moveRight() {
-        if (!inSleepModeProperty().get() && !inStatsMenu.get()) {
+        if (!inSleepModeProperty().get()) {
             DataManager.getInstance().nextTracker();
             updateTracker();
         }
@@ -88,11 +88,9 @@ public class Controller implements Initializable {
     }
 
     public void toggleStatsMenu() {
-        if (!isInSleepMode()) {
-            inStatsMenu.set(!isInStatsMenu());
-            if (isInStatsMenu()) {
-                updateStatsMenu();
-            }
+        inStatsMenu.set(!isInStatsMenu());
+        if (isInStatsMenu()) {
+            updateStatsMenu();
         }
     }
 
@@ -165,6 +163,7 @@ public class Controller implements Initializable {
 
     private void setupMenu() {
         menuButton.setGraphic(getImage("hamburger", 40, 40));
+        menuButton.disableProperty().bind(inSleepMode);
         setVisibility(stats, inStatsMenu);
         stats.setStyle("-fx-font: 15pt System");
     }
