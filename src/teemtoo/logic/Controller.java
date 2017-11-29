@@ -34,12 +34,15 @@ import java.util.ResourceBundle;
  */
 public class Controller implements Initializable {
 
+
+    //Define constants (window dimensions, color, etc...)
     public static final int WIDTH = 300, HEIGHT = 200;
     public static final String FXML_NAME = "activity-tracker.fxml";
     private static final String TIME_FORMAT = "h:mm a";
     private static final int[] CALORIE_INTAKE_LEVELS = {1, 10, 50};
     private static final String NIGHT_MODE_COLOR = "5F9EA0";
 
+    //Singleton instance
     private static Controller instance;
 
     @FXML private Pane background;
@@ -52,6 +55,7 @@ public class Controller implements Initializable {
     @FXML private Button sleepButton;
     @FXML private ListView<String> stats;
 
+    //Sleep mode and stats menu states
     private BooleanProperty inSleepMode = new SimpleBooleanProperty();
     private BooleanProperty inStatsMenu = new SimpleBooleanProperty();
     private int calorieIntakeAmount = CALORIE_INTAKE_LEVELS[1];
@@ -67,6 +71,8 @@ public class Controller implements Initializable {
     }
 
 
+    //Switch to tracker to the "left"
+    //(moveLeft() and moveRight() will only work if the user is not asleep or looking at stats)
     public void moveLeft() {
         if (!inSleepMode.get() && !inStatsMenu.get()) {
             DataManager.getInstance().previousTracker();
@@ -77,6 +83,7 @@ public class Controller implements Initializable {
         }
     }
 
+    //Switch to tracker to the "right"
     public void moveRight() {
         if (!inSleepModeProperty().get() && !inStatsMenu.get()) {
             DataManager.getInstance().nextTracker();
@@ -87,6 +94,7 @@ public class Controller implements Initializable {
         }
     }
 
+    //Opens stats menu
     public void toggleStatsMenu() {
         if (!isInSleepMode()) {
             inStatsMenu.set(!isInStatsMenu());
