@@ -56,6 +56,10 @@ public class Controller implements Initializable {
     private BooleanProperty inStatsMenu = new SimpleBooleanProperty();
     private int calorieIntakeAmount = CALORIE_INTAKE_LEVELS[1];
 
+    private ImageView menuIcon = getImage("hamburger", 40, 40);
+    private ImageView moonIcon = getImage("moon", 40, 35);
+    private ImageView lockIcon = getImage("lock", 40, 40);
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         instance = this;
@@ -110,6 +114,7 @@ public class Controller implements Initializable {
     }
 
     public void toggleSleepMode() {
+        sleepButton.setGraphic(isInSleepMode() ? moonIcon : lockIcon);
         DataManager.getInstance().handle(new SleepEvent());
     }
 
@@ -150,7 +155,7 @@ public class Controller implements Initializable {
     }
 
     private void setupSleep() {
-        sleepButton.setGraphic(getImage("moon", 40, 35));
+        sleepButton.setGraphic(moonIcon);
         setVisibility(sleepButton, DataManager.getInstance().showSleepButton());
         inSleepMode.addListener((obs, old, asleep) -> {
             if (asleep) {
@@ -162,7 +167,7 @@ public class Controller implements Initializable {
     }
 
     private void setupMenu() {
-        menuButton.setGraphic(getImage("hamburger", 40, 40));
+        menuButton.setGraphic(menuIcon);
         menuButton.disableProperty().bind(inSleepMode);
         setVisibility(stats, inStatsMenu);
         stats.setStyle("-fx-font: 15pt System");
