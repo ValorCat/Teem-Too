@@ -58,6 +58,7 @@ public class Controller implements Initializable {
     @FXML private Slider addCalorieSlider;
     @FXML private Button sleepButton;
     @FXML private ListView<String> stats;
+    @FXML private Button clearButton;
 
     //Sleep mode and stats menu states
     private BooleanProperty inSleepMode = new SimpleBooleanProperty();
