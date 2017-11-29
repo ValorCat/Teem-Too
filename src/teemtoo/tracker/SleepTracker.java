@@ -37,7 +37,7 @@ public class SleepTracker extends Tracker<Long> {
         return Bindings.createStringBinding(() -> {
             if (inSleepMode.get()) {
                 // currently asleep
-                return "ZZZ...";
+                return "...ZZZ...";
             } else if (lastFallAsleepTime.get() == -1) {
                 // no prior sleep data
                 return "---";
