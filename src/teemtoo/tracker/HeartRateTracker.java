@@ -28,15 +28,18 @@ public class HeartRateTracker extends Tracker<Double> {
         return event.getBPMData() != Event.NO_DATA;
     }
 
+
+    //The heart tracker will supposedly receive a bpm event every 2 seconds
     @Override
     protected void handle(Event event) {
+
         // todo determine best way to calculate bpm
         bpm.set(event.getBPMData());
     }
 
     @Override
     protected void saveAndReset() {
-        // todo determine how to save average bpm
+        log.update(bpm.getValue());
     }
 
 }

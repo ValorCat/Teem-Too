@@ -31,7 +31,7 @@ public class DataLog<NumType extends Number> {
         return output;
     }
 
-    public String getLastDay() {
+    public String getLastDataPoint() {
         return data.isEmpty() ? EMPTY_VALUE : format(data.getLast());
     }
 

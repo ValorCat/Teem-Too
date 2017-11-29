@@ -19,6 +19,7 @@ import teemtoo.event.CalorieEvent;
 import teemtoo.event.SleepEvent;
 import teemtoo.event.StepEvent;
 import teemtoo.tracker.DataLog;
+import teemtoo.tracker.HeartRateTracker;
 import teemtoo.tracker.Tracker;
 
 import java.io.InputStream;
@@ -116,12 +117,22 @@ public class Controller implements Initializable {
     private void updateStatsMenu() {
         DataLog log = DataManager.getInstance().getCurrentLog();
         stats.getItems().clear();
-        stats.getItems().addAll(
-                "Yesterday:  " + log.getLastDay(),
-                "Last 3 days:  " + log.getAverage(3),
-                "Last week:  " + log.getAverage(7),
-                "Last month:  " + log.getAverage(30)
-        );
+        if (DataManager.getInstance().getCurrentTracker() instanceof HeartRateTracker)
+        {
+            stats.getItems().addAll(
+                    "Last minute:  " + log.getLastDataPoint(),
+                    "Last 5 minutes:  " + log.getAverage(5),
+                    "Last 15 minutes:  " + log.getAverage(15),
+                    "Last 30 minutes:  " + log.getAverage(30)
+            );
+        } else {
+            stats.getItems().addAll(
+                    "Yesterday:  " + log.getLastDataPoint(),
+                    "Last 3 days:  " + log.getAverage(3),
+                    "Last week:  " + log.getAverage(7),
+                    "Last month:  " + log.getAverage(30)
+            );
+        }
     }
 
     public void addCalories() {
