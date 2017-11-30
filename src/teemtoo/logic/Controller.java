@@ -33,7 +33,6 @@ import java.util.ResourceBundle;
  */
 public class Controller implements Initializable {
 
-
     //Define constants (window dimensions, color, etc...)
     public static final int WIDTH = 300, HEIGHT = 200;
     public static final String FXML_NAME = "activity-tracker.fxml";
@@ -66,8 +65,9 @@ public class Controller implements Initializable {
     private int calorieIntakeAmount = CALORIE_INTAKE_LEVELS[1];
 
     private ImageView menuIcon = getImage("hamburger", 40, 40);
+    private ImageView backIcon = getImage("back", 35, 35);
     private ImageView moonIcon = getImage("moon", 40, 35);
-    private ImageView sunIcon = getImage("sunrise", 40, 30);
+    private ImageView sunIcon = getImage("sunrise", 40, 35);
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -83,9 +83,8 @@ public class Controller implements Initializable {
         separator.visibleProperty().bind(inSleepMode.not());
     }
 
-
     //Switch to tracker to the "left"
-    //(moveLeft() and moveRight() will only work if the user is not asleep or looking at stats)
+    //(moveLeft() and moveRight() will only work if the user is not asleep)
     public void moveLeft() {
         if (!inSleepMode.get()) {
             DataManager.getInstance().previousTracker();
@@ -110,6 +109,7 @@ public class Controller implements Initializable {
     //Opens stats menu
     public void toggleStatsMenu() {
         inStatsMenu.set(!isInStatsMenu());
+        menuButton.setGraphic(isInStatsMenu() ? backIcon : menuIcon);
         if (isInStatsMenu()) {
             updateStatsMenu();
         }

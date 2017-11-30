@@ -17,14 +17,14 @@ public class PulseReader implements Sensor {
     @Override
     public void poll() {
         pollCounter++;
-        if (pollCounter == 120) {
+        if (pollCounter == 180) {
             update(new HeartEvent(getHeartRate()));
             pollCounter = 0;
         }
     }
 
     private double getHeartRate() {
-        return 80 + random.nextGaussian() * 6;
+        return 80 + random.nextGaussian() * 4;
     }
 
 }
