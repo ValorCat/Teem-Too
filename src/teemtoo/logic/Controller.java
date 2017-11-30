@@ -118,7 +118,7 @@ public class Controller implements Initializable {
     private void updateStatsMenu() {
         DataLog log = DataManager.getInstance().getCurrentLog();
         stats.getItems().clear();
-        if (DataManager.getInstance().getCurrentTracker() instanceof HeartRateTracker)
+        if (DataManager.getInstance().getCurrentTracker() instanceof HeartRateTracker) // todo fix up instanceof
         {
             stats.getItems().addAll(
                     "Last minute:  " + log.getLastDataPoint(),
@@ -153,12 +153,33 @@ public class Controller implements Initializable {
     }
 
     public void handleKeyboard(KeyEvent event) {
+        Tracker current = DataManager.getInstance().getCurrentTracker();
         switch (event.getCode()) {
             case LEFT:
                 moveLeft();
                 break;
             case RIGHT:
                 moveRight();
+                break;
+            case ENTER:
+                toggleStatsMenu();
+                break;
+            case UP:
+                if (current.showCalorieInput()) {
+                    addCalorieSlider.increment();
+                }
+                break;
+            case DOWN:
+                if (current.showCalorieInput()) {
+                    addCalorieSlider.decrement();
+                }
+                break;
+            case SHIFT:
+                if (current.showCalorieInput()) {
+                    addCalories();
+                } else if (current.showSleepButton()) {
+                    toggleSleepMode();
+                }
                 break;
             case S:
                 DataManager.getInstance().handle(new StepEvent());
