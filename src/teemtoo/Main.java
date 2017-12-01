@@ -21,6 +21,14 @@ public class Main extends Application {
 
     private static final String TITLE = "Activity Tracker Emulator";
 
+    public static void main(String[] args) {
+        launch(args);
+    }
+
+    /**
+     * The start point for the application.
+     * @param primaryStage the main window
+     */
     @Override
     public void start(Stage primaryStage) {
         Scene scene = new Scene(getFXML(), Controller.WIDTH, Controller.HEIGHT);
@@ -32,6 +40,10 @@ public class Main extends Application {
         getMainTimer().start();
     }
 
+    /**
+     * Parse the FXML file and build a window out of it.
+     * @return a Pane built from the FXML file
+     */
     private static Pane getFXML() {
         try {
             URL resource = Main.class.getResource(Controller.FXML_NAME);
@@ -44,6 +56,10 @@ public class Main extends Application {
         }
     }
 
+    /**
+     * The main clock, which polls the sensors 60 times each second.
+     * @return the main clock
+     */
     private static AnimationTimer getMainTimer() {
         return new AnimationTimer() {
             @Override

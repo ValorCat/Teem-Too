@@ -17,7 +17,6 @@ import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 import teemtoo.event.CalorieEvent;
 import teemtoo.event.SleepEvent;
-import teemtoo.event.StepEvent;
 import teemtoo.tracker.DataLog;
 import teemtoo.tracker.HeartRateTracker;
 import teemtoo.tracker.Tracker;
@@ -33,10 +32,10 @@ import java.util.ResourceBundle;
  */
 public class Controller implements Initializable {
 
-    //Define constants (window dimensions, color, etc...)
+    /* Define constants (window dimensions, color, etc...) */
     public static final int WIDTH = 300, HEIGHT = 200;
     public static final String FXML_NAME = "activity-tracker.fxml";
-    private static final String TIME_FORMAT = "h:mm a";
+    private static final String TIME_FORMAT = "h:mm:ss a";
     private static final int[] CALORIE_INTAKE_LEVELS = {1, 10, 50};
 
     private static final String DAY_MODE_COLOR = "EAEAEA";
@@ -44,9 +43,10 @@ public class Controller implements Initializable {
     private static final String CURRENT_VALUE_DAY_COLOR = "805C7E";
     private static final String CURRENT_VALUE_NIGHT_COLOR = "456F9A";
 
-    //Singleton instance
+    /* Singleton instance */
     private static Controller instance;
 
+    /* The actual UI */
     @FXML private Pane background;
     @FXML private Button menuButton;
     @FXML private Label clock;
@@ -57,21 +57,27 @@ public class Controller implements Initializable {
     @FXML private Slider addCalorieSlider;
     @FXML private Button sleepButton;
     @FXML private ListView<String> stats;
-    @FXML private Button clearButton;
+    @FXML private Button clearButton; // todo implement clear button
 
-    //Sleep mode and stats menu states
+    /* Sleep mode and stats menu states */
     private BooleanProperty inSleepMode = new SimpleBooleanProperty();
     private BooleanProperty inStatsMenu = new SimpleBooleanProperty();
     private int calorieIntakeAmount = CALORIE_INTAKE_LEVELS[1];
 
+    /* Button icons */
     private ImageView menuIcon = getImage("hamburger", 40, 40);
     private ImageView backIcon = getImage("back", 35, 35);
     private ImageView moonIcon = getImage("moon", 40, 35);
     private ImageView sunIcon = getImage("sunrise", 40, 35);
 
+    /**
+     * The start point of the Controller, analogous to its constructor.
+     * @param location unused
+     * @param resources unused
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        instance = this;
+        instance = this; // make Controller a singleton
         setupClock();
         setupCalories();
         setupSleep();
@@ -83,8 +89,9 @@ public class Controller implements Initializable {
         separator.visibleProperty().bind(inSleepMode.not());
     }
 
-    //Switch to tracker to the "left"
-    //(moveLeft() and moveRight() will only work if the user is not asleep)
+    /**
+     * Switch to tracker on the "left". Has no effect while in sleep mode. Triggered by swipin or using the arrow keys.
+     */
     public void moveLeft() {
         if (!inSleepMode.get()) {
             DataManager.getInstance().previousTracker();
@@ -95,9 +102,12 @@ public class Controller implements Initializable {
         }
     }
 
-    //Switch to tracker to the "right"
+    /**
+     * Switch to tracker on the "right". Has no effect while in sleep mode. Triggered by swiping or using the arrow
+     * keys.
+     */
     public void moveRight() {
-        if (!inSleepModeProperty().get()) {
+        if (!isInSleepMode()) {
             DataManager.getInstance().nextTracker();
             updateTracker();
         }
@@ -106,7 +116,9 @@ public class Controller implements Initializable {
         }
     }
 
-    //Opens stats menu
+    /**
+     * Open or close the statistics page. Triggered by pressing the stats icon or the enter key.
+     */
     public void toggleStatsMenu() {
         inStatsMenu.set(!isInStatsMenu());
         menuButton.setGraphic(isInStatsMenu() ? backIcon : menuIcon);
@@ -136,10 +148,18 @@ public class Controller implements Initializable {
         }
     }
 
+    /**
+     * Get the amount of calories selected on the calorie slider and add it to the calorie total. Triggered
+     * by pressing the add button on the calorie tracker view or the shift key.
+     */
     public void addCalories() {
         DataManager.getInstance().handle(new CalorieEvent(calorieIntakeAmount));
     }
 
+    /**
+     * Switch between sleep and awake modes. Triggered by pressing the sleep button on the sleep tracker view
+     * or the shift key.
+     */
     public void toggleSleepMode() {
         boolean asleep = isInSleepMode();
         sleepButton.setGraphic(asleep ? moonIcon : sunIcon);
@@ -148,10 +168,21 @@ public class Controller implements Initializable {
         DataManager.getInstance().handle(new SleepEvent());
     }
 
-    public BooleanProperty inSleepModeProperty() {
+    /**
+     * Used in SleepTracker to synchronize its internal sleep mode property with the UI's property. This
+     * allows for this property to update automatically and instantly when the sleep tracker's updates. By
+     * convention, property getter methods are marked final.
+     * @return the UI's sleep mode property
+     */
+    public final BooleanProperty inSleepModeProperty() {
         return inSleepMode;
     }
 
+    /**
+     * The keyboard input handler. Whenever a key is pressed while the application is in focus, it gets
+     * passed to the switch statement below. Touchscreen events are specified in the FXML file.
+     * @param event the event to be processed
+     */
     public void handleKeyboard(KeyEvent event) {
         Tracker current = DataManager.getInstance().getCurrentTracker();
         switch (event.getCode()) {
@@ -181,12 +212,15 @@ public class Controller implements Initializable {
                     toggleSleepMode();
                 }
                 break;
-            case S:
-                DataManager.getInstance().handle(new StepEvent());
-                break;
         }
     }
 
+    /**
+     * Initializes the clock label that is displayed on the UI. The time is updated once a second and is displayed
+     * in the format specified by the TIME_FORMAT constant at the top of this class. Timeline, KeyFrame, Duration,
+     * and Animation are JavaFX classes designed for creating recurring operations, and they seemed simpler than
+     * dealing with threading manually.
+     */
     private void setupClock() {
         DateTimeFormatter format = DateTimeFormatter.ofPattern(TIME_FORMAT);
         KeyFrame frame1 = new KeyFrame(Duration.seconds(0), e -> clock.setText(LocalTime.now().format(format)));

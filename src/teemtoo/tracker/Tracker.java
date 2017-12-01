@@ -27,6 +27,10 @@ public abstract class Tracker<NumType extends Number> {
     protected abstract void handle(Event event);
     protected abstract void saveAndReset();
 
+    /**
+     * Handle an event if it's of the right type, or otherwise forward it on through the chain.
+     * @param event the event to be handled or forwarded
+     */
     public void attemptToHandle(Event event) {
         if (event.isReset()) {
             saveAndReset();
@@ -38,6 +42,10 @@ public abstract class Tracker<NumType extends Number> {
         }
     }
 
+    /**
+     * Retrieve the text to appear below the horizontal bar on the tracker screen.
+     * @return the text for the UI
+     */
     public String getLabel() {
         assert label != null;
         return label;
@@ -60,6 +68,10 @@ public abstract class Tracker<NumType extends Number> {
         next.previous = this;
     }
 
+    /**
+     * Mark this tracker as the end of the chain of responsibility. Events that reach the end of the chain and cannot be
+     * handled are discarded.
+     */
     public void setEndOfChain() {
         isEndOfChain = true;
     }
