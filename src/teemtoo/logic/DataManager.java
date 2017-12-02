@@ -18,8 +18,6 @@ import java.util.List;
 /**
  * @since 11/17/2017
  */
-
-//Controller of Trackers
 public final class DataManager {
 
     private static final LocalTime RESET_TIME = LocalTime.MIDNIGHT;
@@ -92,6 +90,7 @@ public final class DataManager {
     }
 
     public static DataManager getInstance() {
+        assert instance != null;
         return instance;
     }
 
