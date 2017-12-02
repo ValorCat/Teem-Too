@@ -16,6 +16,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 import teemtoo.event.CalorieEvent;
+import teemtoo.event.ResetEvent;
 import teemtoo.event.SleepEvent;
 import teemtoo.tracker.DataLog;
 import teemtoo.tracker.HeartRateTracker;
@@ -57,7 +58,6 @@ public class Controller implements Initializable {
     @FXML private Slider addCalorieSlider;
     @FXML private Button sleepButton;
     @FXML private ListView<String> stats;
-    @FXML private Button clearButton; // todo implement clear button
 
     /* Sleep mode and stats menu states */
     private BooleanProperty inSleepMode = new SimpleBooleanProperty();
@@ -211,6 +211,10 @@ public class Controller implements Initializable {
                 } else if (current.showSleepButton()) {
                     toggleSleepMode();
                 }
+                break;
+            case R: // for demonstration/testing purposes
+                DataManager.getInstance().handle(new ResetEvent());
+                updateStatsMenu();
                 break;
         }
     }
