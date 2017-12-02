@@ -22,6 +22,14 @@ keyboard). The background will darken, the moon will change to a sunrise icon, a
 signify the device is now in sleep mode. While in this state, navigation is locked. To "awaken", press the sunrise icon
 (or shift). The total time slept will be displayed on the sleep view.
 
+### Steps
+The step tracker will display the users current step count for the day. The step count will update itself periodically
+based on a random number generation, it can also be incremented using the "S" key. 
+
+### Heartbeat
+The heartbeat tracker will display the current bpm estimate for the user. Since there is no actual hardware measuring the 
+user's heartbeat, the estimate is also based on a random number generator.
+
 ### Logs
 Pressing the hamburger button (or enter on the keyboard) will toggle the data log, which displays information from the
 last 30 days in condensed form.
