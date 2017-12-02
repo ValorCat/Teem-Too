@@ -84,6 +84,10 @@ public abstract class Tracker<NumType extends Number> {
         return false;
     }
 
+    public boolean showShortLog() {
+        return false;
+    }
+
     private void forward(Event event) {
         if (!isEndOfChain) {
             next.attemptToHandle(event);

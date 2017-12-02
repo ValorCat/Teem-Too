@@ -41,4 +41,8 @@ public class HeartRateTracker extends Tracker<Double> {
         log.update(bpm.getValue());
     }
 
+    @Override
+    public boolean showShortLog() {
+        return true;
+    }
 }

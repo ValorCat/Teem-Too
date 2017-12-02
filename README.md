@@ -24,7 +24,7 @@ signify the device is now in sleep mode. While in this state, navigation is lock
 
 ### Steps
 The step tracker will display the users current step count for the day. The step count will update itself periodically
-based on a random number generation, it can also be incremented using the "S" key. 
+based on a random number generation. 
 
 ### Heartbeat
 The heartbeat tracker will display the current bpm estimate for the user. Since there is no actual hardware measuring the 

@@ -19,7 +19,6 @@ import teemtoo.event.CalorieEvent;
 import teemtoo.event.ResetEvent;
 import teemtoo.event.SleepEvent;
 import teemtoo.tracker.DataLog;
-import teemtoo.tracker.HeartRateTracker;
 import teemtoo.tracker.Tracker;
 
 import java.io.InputStream;
@@ -132,9 +131,7 @@ public class Controller implements Initializable {
     private void updateStatsMenu() {
         DataLog log = DataManager.getInstance().getCurrentLog();
         stats.getItems().clear();
-        if (DataManager.getInstance().getCurrentTracker() instanceof HeartRateTracker) // todo fix up instanceof
-
-        {
+        if (DataManager.getInstance().getCurrentTracker().showShortLog()) {
             stats.getItems().addAll(
                     "Last minute:  " + log.getLastDataPoint(),
                     "Last 5 minutes:  " + log.getAverage(5),
