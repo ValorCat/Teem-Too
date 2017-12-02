@@ -59,6 +59,7 @@ public class Controller implements Initializable {
     @FXML private ListView<String> stats;
     @FXML private Button clearButton; // todo implement clear button
 
+
     /* Sleep mode and stats menu states */
     private BooleanProperty inSleepMode = new SimpleBooleanProperty();
     private BooleanProperty inStatsMenu = new SimpleBooleanProperty();
@@ -92,6 +93,7 @@ public class Controller implements Initializable {
     /**
      * Switch to tracker on the "left". Has no effect while in sleep mode. Triggered by swipin or using the arrow keys.
      */
+
     public void moveLeft() {
         if (!inSleepMode.get()) {
             DataManager.getInstance().previousTracker();
@@ -131,6 +133,7 @@ public class Controller implements Initializable {
         DataLog log = DataManager.getInstance().getCurrentLog();
         stats.getItems().clear();
         if (DataManager.getInstance().getCurrentTracker() instanceof HeartRateTracker) // todo fix up instanceof
+
         {
             stats.getItems().addAll(
                     "Last minute:  " + log.getLastDataPoint(),

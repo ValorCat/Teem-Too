@@ -18,6 +18,7 @@ public class DataLog<NumType extends Number> {
 
     /* Formats the data for viewing. For example, sleep duration data is stored internally as longs but is displayed
      * in digital clock format: h:mm:ss. */
+
     private Function<Number,String> formatter;
 
     /* Determines whether the data should be truncated to an integer when it has no fractional component. This makes
@@ -46,6 +47,7 @@ public class DataLog<NumType extends Number> {
         return data.isEmpty() ? EMPTY_VALUE : format(data.getLast());
     }
 
+
     /**
      * Compute the mean across a number of log entries.
      * @param period the number of entries to consider, beginning from the most recent. Cannot exceed DataLog.FULL_SIZE.
@@ -53,6 +55,7 @@ public class DataLog<NumType extends Number> {
      */
     public String getAverage(int period) {
         assert period > 0 && period <= FULL_SIZE;
+
         OptionalDouble average = getAverageRaw(period);
         return average.isPresent() ? format(average.getAsDouble()) : EMPTY_VALUE;
     }

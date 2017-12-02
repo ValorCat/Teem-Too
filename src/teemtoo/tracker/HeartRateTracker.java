@@ -32,6 +32,7 @@ public class HeartRateTracker extends Tracker<Double> {
     //The heart tracker will supposedly receive a bpm event every 2 seconds
     @Override
     protected void handle(Event event) {
+
         bpm.set(event.getBPMData());
     }
 
