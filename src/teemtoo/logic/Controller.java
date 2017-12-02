@@ -273,6 +273,7 @@ public class Controller implements Initializable {
     }
 
     public static Controller getInstance() {
+        assert instance != null;
         return instance;
     }
 
