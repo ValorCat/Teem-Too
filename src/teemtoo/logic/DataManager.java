@@ -5,11 +5,13 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableBooleanValue;
 import teemtoo.event.Event;
+import teemtoo.event.ResetEvent;
 import teemtoo.sensor.Pedometer;
 import teemtoo.sensor.PulseReader;
 import teemtoo.sensor.Sensor;
 import teemtoo.tracker.*;
 
+import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -20,6 +22,7 @@ import java.util.List;
 //Controller of Trackers
 public final class DataManager {
 
+    private static final LocalTime RESET_TIME = LocalTime.MIDNIGHT;
     private static DataManager instance = new DataManager();
 
     private ObjectProperty<Tracker> current;
@@ -32,6 +35,20 @@ public final class DataManager {
         current = new SimpleObjectProperty<>(chain);
     }
 
+    /**
+     * Poll the sensors and check if it's time to reset.
+     */
+    public void update() {
+        sensors.forEach(Sensor::poll);
+        if (LocalTime.now().equals(RESET_TIME)) {
+            handle(new ResetEvent());
+        }
+    }
+
+    /**
+     * Pass an event into the chain of responsibility to be processed by its appropriate tracker.
+     * @param event the event to be processed
+     */
     public void handle(Event event) {
         chain.attemptToHandle(event);
     }
@@ -50,10 +67,6 @@ public final class DataManager {
 
     public DataLog getCurrentLog() {
         return current.get().getLog();
-    }
-
-    public List<Sensor> getSensors() {
-        return sensors;
     }
 
     public ObservableBooleanValue showCalorieInput() {

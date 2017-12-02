@@ -7,9 +7,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.value.ObservableStringValue;
 import teemtoo.event.Event;
-import teemtoo.event.ResetEvent;
 import teemtoo.logic.Controller;
-import teemtoo.logic.DataManager;
 
 import java.util.concurrent.TimeUnit;
 
@@ -18,7 +16,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class SleepTracker extends Tracker<Long> {
 
-    private static final int MIN_SLEEP_THRESHOLD = /*5000*/ 0; // todo reset after demo
+    /* The minimum time (in milliseconds) you can sleep before the tracker will recognize it as a sleep cycle. */
+    private static final long MIN_SLEEP_THRESHOLD = 60_000;
 
     private LongProperty lastFallAsleepTime;
     private LongProperty lastDuration;
@@ -60,8 +59,6 @@ public class SleepTracker extends Tracker<Long> {
             long duration = System.currentTimeMillis() - lastFallAsleepTime.get();
             if (duration > MIN_SLEEP_THRESHOLD) {
                 lastDuration.set(duration);
-                // todo add confirmation dialog
-                DataManager.getInstance().handle(new ResetEvent());
             }
         } else {
             lastFallAsleepTime.set(event.getSleepTimestamp());

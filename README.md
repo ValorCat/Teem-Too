@@ -16,7 +16,7 @@ For example, you consume 120 calories and want to update the tracker. Move the s
 twice, then readjust the slider to 10 and tap the add button twice more.
 
 ### Sleep
-The sleep tracker displays the duration of the user's last sleep episode, or "---" if the user has not yet used the
+The sleep tracker displays the duration of the user's last sleep episode, or `---` if the user has not yet used the
 sleep tracking feature. To enter sleep mode, navigate to the sleep view and press the moon button (or shift on the
 keyboard). The background will darken, the moon will change to a sunrise icon, and several large Zs will appear to
 signify the device is now in sleep mode. While in this state, navigation is locked. To "awaken", press the sunrise icon
@@ -31,5 +31,12 @@ The heartbeat tracker will display the current bpm estimate for the user. Since 
 user's heartbeat, the estimate is also based on a random number generator.
 
 ### Logs
-Pressing the hamburger button (or enter on the keyboard) will toggle the data log, which displays information from the
-last 30 days in condensed form.
+Pressing the hamburger button (or enter on the keyboard) will toggle the data log, which displays recent data in a
+condensed form. The log is updated every midnight, at which point the views are reset to 0.
+
+*Technical Note:* You can press R on the keyboard to simulate a reset event.
+
+## Technical
+
+The activity tracker requires at least Java 8 (lambdas!) to compile. It was tested with IntelliJ IDEA on Windows and
+Mac. The main class can be found at `src/teemtoo/Main.java`.

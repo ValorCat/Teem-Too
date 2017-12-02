@@ -9,7 +9,6 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import teemtoo.logic.Controller;
 import teemtoo.logic.DataManager;
-import teemtoo.sensor.Sensor;
 
 import java.io.IOException;
 import java.net.URL;
@@ -57,14 +56,14 @@ public class Main extends Application {
     }
 
     /**
-     * The main clock, which polls the sensors 60 times each second.
+     * The main clock, which updates the system up to 60 times each second.
      * @return the main clock
      */
     private static AnimationTimer getMainTimer() {
         return new AnimationTimer() {
             @Override
             public void handle(long now) {
-                DataManager.getInstance().getSensors().forEach(Sensor::poll);
+                DataManager.getInstance().update();
             }
         };
     }
